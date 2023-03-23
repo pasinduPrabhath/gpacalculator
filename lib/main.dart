@@ -41,10 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (result != null) {
       setState(() {
-        final List<bool> checked = result;
+        final List<String> checked = result;
         for (int i = 0; i < checked.length; i++) {
-          if (checked[i]) {
-            items.add('Item ${i + 1}');
+          for (int j = 0; j < items.length; j++) {
+            if (!items.contains(checked[i])) {
+              items.add(checked[i]);
+            }
           }
         }
       });

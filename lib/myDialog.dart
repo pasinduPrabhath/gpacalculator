@@ -9,9 +9,8 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<String> checkItems = ['Item 1', 'Item 2', 'Item 3'];
-  List<String> checkItemsPass = [];
-
+  List<String> checkListItems = ['Apple', 'Vodafone', 'Oneplus'];
+  List<String> checkedItems = [];
   List<bool> checked = [false, false, false];
 
   @override
@@ -25,18 +24,21 @@ class _MyDialogState extends State<MyDialog> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                itemCount: checkItems.length,
+                itemCount: checkListItems.length,
                 itemBuilder: (context, index) {
                   return CheckboxListTile(
-                    title: Text(checkItems[index]),
+                    title: Text(checkListItems[index]),
                     value: checked[index],
                     onChanged: (value) {
                       setState(() {
                         checked[index] = value!;
-                        // if (checked[index]) {
-                        //   checkItemsPass.add(checkItems[index]);
-                        // }
+                        if (checked[index] == true) {
+                          checkedItems.add(checkListItems[index]);
+                        } else {
+                          checkedItems.remove(checkListItems[index]);
+                        }
                       });
+                      // checkedItems.add(checkListItems[index]);
                     },
                   );
                 },
@@ -44,7 +46,7 @@ class _MyDialogState extends State<MyDialog> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context, checked);
+                Navigator.pop(context, checkedItems);
               },
               child: const Text('Done'),
             ),
