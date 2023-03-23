@@ -78,10 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: items.length,
                 itemBuilder: (context, index) => ListTile(
                   title: Center(child: Text('${index + 1}. ${items[index]}')),
+
                   // leading: const Icon(Icons.star),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
