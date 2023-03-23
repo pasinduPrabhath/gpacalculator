@@ -32,8 +32,11 @@ class MyHomePage extends StatefulWidget {
 
 //show dialog box
 class _MyHomePageState extends State<MyHomePage> {
+  double GPAValue = 0.0;
+  var checkBoxValue = <double>[];
   String inputValue = 'made it';
-  List<String> items = <String>['A', 'B', 'C', 'D', 'F'];
+  List<String> items = <String>[''];
+
   Future<void> _getValue() async {
     final result = await Navigator.push(
       context,
@@ -41,11 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (result != null) {
       setState(() {
-        final List<String> checked = result;
+        final checkBoxItem = result['items'] as List<String>;
+        checkBoxValue = result['values'];
+
+        final List<String> checked = checkBoxItem;
+        final List<double> valueToCount = checkBoxValue;
+
+        // final items = <String>[];
         for (int i = 0; i < checked.length; i++) {
           for (int j = 0; j < items.length; j++) {
             if (!items.contains(checked[i])) {
               items.add(checked[i]);
+              valueToCount.add(checkBoxValue[i]);
+              // ignore: avoid_print
+              print(valueToCount);
+              double sumOfValues = valueToCount.reduce((a, b) => a + b);
+
+              GPAValue = sumOfValues;
             }
           }
         }
@@ -56,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
-    String GPAValue = "0.0";
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const SizedBox(),
             ),
             Text(
-              GPAValue,
+              GPAValue.toString(),
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -79,13 +93,33 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            const Text(
+              'Courses List',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: ListView.builder(
                 itemCount: items.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Center(child: Text('${index + 1}. ${items[index]}')),
-
-                  // leading: const Icon(Icons.star),
+                itemBuilder: (context, index) => Dismissible(
+                  key: Key(items[index]),
+                  onDismissed: (direction) {
+                    setState(() {
+                      items.removeAt(index);
+                      GPAValue = GPAValue - checkBoxValue[index];
+                    });
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerLeft,
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  direction: DismissDirection.startToEnd,
+                  child: ListTile(
+                    title: Center(child: Text(items[index])),
+                  ),
                 ),
               ),
             ),
