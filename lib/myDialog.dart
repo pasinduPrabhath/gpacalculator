@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+class GPAData {
+  final String courseName;
+  final double weight;
+  bool selected;
+
+  GPAData({
+    required this.courseName,
+    required this.weight,
+    required this.selected,
+  });
+}
+
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key});
 
@@ -9,11 +21,17 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<String> checkListItems = ['Apple', 'Vodafone', 'Oneplus'];
-  List<double> checkListItemValues = [1, 2, 3];
+  List<GPAData> courseData = [
+    GPAData(courseName: 'Programming', weight: 1, selected: false),
+    GPAData(courseName: 'DB', weight: 2, selected: false),
+    GPAData(courseName: 'Cloud', weight: 3, selected: false),
+    GPAData(courseName: 'AI', weight: 4, selected: false),
+    GPAData(courseName: 'ML', weight: 5, selected: false),
+    GPAData(courseName: 'Data Science', weight: 6, selected: false),
+    GPAData(courseName: 'Cyber Security', weight: 7, selected: false),
+  ];
   List<String> checkedItems = [];
   List<double> checkedItemsValues = [];
-  List<bool> checked = [false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +44,24 @@ class _MyDialogState extends State<MyDialog> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                itemCount: checkListItems.length,
+                itemCount: courseData.length,
                 itemBuilder: (context, index) {
                   return CheckboxListTile(
-                    title: Text(checkListItems[index]),
-                    value: checked[index],
+                    title: Text(courseData[index].courseName),
+                    value: courseData[index].selected,
                     onChanged: (value) {
                       setState(() {
-                        checked[index] = value!;
-                        if (checked[index] == true) {
-                          checkedItems.add(checkListItems[index]);
-                          checkedItemsValues.add(checkListItemValues[index]);
+                        courseData[index].selected = value!;
+                        if (value) {
+                          checkedItems.add(courseData[index].courseName);
+                          checkedItemsValues
+                              .add(courseData[index].weight.toDouble());
                         } else {
-                          checkedItems.remove(checkListItems[index]);
-                          checkedItemsValues.remove(checkListItemValues[index]);
+                          checkedItems.remove(courseData[index].courseName);
+                          checkedItemsValues
+                              .remove(courseData[index].weight.toDouble());
                         }
                       });
-                      // checkedItems.add(checkListItems[index]);
                     },
                   );
                 },
@@ -63,6 +82,3 @@ class _MyDialogState extends State<MyDialog> {
     );
   }
 }
-
-// In your button onPressed callback:
-

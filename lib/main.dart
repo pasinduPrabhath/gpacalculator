@@ -34,8 +34,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double GPAValue = 0.0;
   var checkBoxValue = <double>[];
+  var valueToCount = <double>[];
   String inputValue = 'made it';
   List<String> items = <String>[''];
+  List<double> values = <double>[];
 
   Future<void> _getValue() async {
     final result = await Navigator.push(
@@ -48,20 +50,24 @@ class _MyHomePageState extends State<MyHomePage> {
         checkBoxValue = result['values'];
 
         final List<String> checked = checkBoxItem;
-        final List<double> valueToCount = checkBoxValue;
-
-        // final items = <String>[];
         for (int i = 0; i < checked.length; i++) {
-          for (int j = 0; j < items.length; j++) {
-            if (!items.contains(checked[i])) {
-              items.add(checked[i]);
-              valueToCount.add(checkBoxValue[i]);
-              // ignore: avoid_print
-              print(valueToCount);
-              double sumOfValues = valueToCount.reduce((a, b) => a + b);
+          if (!items.contains(checked[i])) {
+            items.add(checked[i]);
+            values.add(checkBoxValue[i]);
+            valueToCount.add(checkBoxValue[i]);
 
-              GPAValue = sumOfValues;
-            }
+            double sumOfValues = valueToCount.reduce((a, b) => a + b);
+            // ignore: avoid_print
+            // print(sumOfValues);
+
+            GPAValue = sumOfValues;
+          } else {
+            int index = items.indexOf(checked[i]);
+            valueToCount[index] += checkBoxValue[i];
+
+            double sumOfValues = valueToCount.reduce((a, b) => a + b);
+
+            GPAValue = sumOfValues;
           }
         }
       });
@@ -70,8 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: non_constant_identifier_names
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -108,7 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDismissed: (direction) {
                     setState(() {
                       items.removeAt(index);
-                      GPAValue = GPAValue - checkBoxValue[index];
+                      double temp = values[index - 1];
+                      values.removeAt(index - 1);
+                      GPAValue = GPAValue - temp;
                     });
                   },
                   background: Container(
