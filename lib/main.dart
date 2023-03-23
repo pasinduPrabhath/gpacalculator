@@ -35,16 +35,20 @@ class _MyHomePageState extends State<MyHomePage> {
   String inputValue = 'made it';
   List<String> items = <String>['A', 'B', 'C', 'D', 'F'];
   Future<void> _getValue() async {
-    Navigator.push(
+    final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyDialog()),
-    ).then((input) async {
-      if (input != null) {
-        inputValue = input;
-      }
-      items.add(inputValue);
-      return inputValue;
-    });
+      MaterialPageRoute(builder: (context) => const MyDialog()),
+    );
+    if (result != null) {
+      setState(() {
+        final List<bool> checked = result;
+        for (int i = 0; i < checked.length; i++) {
+          if (checked[i]) {
+            items.add('Item ${i + 1}');
+          }
+        }
+      });
+    }
   }
 
   @override
