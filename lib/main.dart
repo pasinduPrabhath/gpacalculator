@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -31,11 +30,13 @@ class MyHomePage extends StatefulWidget {
 
 //show dialog box
 class _MyHomePageState extends State<MyHomePage> {
-  double GPAValue = 0.0;
+  // ignore: non_constant_identifier_names
+  var GPAValue = 0.0;
   var checkBoxValue = <double>[];
   var valueToCount = <double>[];
+  final dropdownValue = <String, String>{};
   String inputValue = 'made it';
-  List<String> items = <String>[''];
+  List<String> items = <String>[];
   List<double> values = <double>[];
 
   Future<void> _getValue() async {
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (!items.contains(checked[i])) {
             items.add(checked[i]);
             values.add(checkBoxValue[i]);
+            dropdownValue[checked[i]] = 'A';
             GPAValue = values.reduce((a, b) => a + b);
           }
         }
@@ -112,6 +114,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   direction: DismissDirection.startToEnd,
                   child: ListTile(
                     title: Center(child: Text(items[index])),
+                    trailing: DropdownButton<String>(
+                      value: dropdownValue[items[index]],
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            dropdownValue[items[index]] = newValue;
+                          });
+                        }
+                      },
+                      items: <String>['A', 'B', 'C', 'D', 'F']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),
