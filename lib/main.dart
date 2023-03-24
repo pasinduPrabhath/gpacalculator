@@ -7,7 +7,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -50,24 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
         checkBoxValue = result['values'];
 
         final List<String> checked = checkBoxItem;
+
         for (int i = 0; i < checked.length; i++) {
           if (!items.contains(checked[i])) {
             items.add(checked[i]);
             values.add(checkBoxValue[i]);
-            valueToCount.add(checkBoxValue[i]);
-
-            double sumOfValues = valueToCount.reduce((a, b) => a + b);
-            // ignore: avoid_print
-            // print(sumOfValues);
-
-            GPAValue = sumOfValues;
-          } else {
-            int index = items.indexOf(checked[i]);
-            valueToCount[index] += checkBoxValue[i];
-
-            double sumOfValues = valueToCount.reduce((a, b) => a + b);
-
-            GPAValue = sumOfValues;
+            GPAValue = values.reduce((a, b) => a + b);
           }
         }
       });
