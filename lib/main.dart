@@ -101,8 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDismissed: (direction) {
                     setState(() {
                       items.removeAt(index);
-                      double temp = values[index - 1];
-                      values.removeAt(index - 1);
+                      double temp = values[index];
+                      values.removeAt(index);
                       GPAValue = GPAValue - temp;
                     });
                   },
