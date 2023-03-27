@@ -137,32 +137,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   direction: DismissDirection.startToEnd,
-                  child: ListTile(
-                    title: Center(child: Text(nameOfCourses[index])),
-                    trailing: DropdownButton<String>(
-                      value: dropdownValue[nameOfCourses[index]],
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            var temp = index;
-                            // double result =
-                            //     (courseWeight[index] * gradeValue[newValue]!) /
-                            //         courseWeight.length;
-                            dropdownValue[nameOfCourses[index]] = newValue;
-                            gradingLetterValue = gradeValue[
-                                newValue]!; //here we update the gpa according to the letter value
-                            // GPAValue += gradingLetterValue;
-                            // GPAValue = result;
-                          });
-                        }
-                      },
-                      items: //here we pass the Grade value array
-                          grades.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                  child: Card(
+                    child: ListTile(
+                      title: Center(child: Text(nameOfCourses[index])),
                     ),
                   ),
                 ),

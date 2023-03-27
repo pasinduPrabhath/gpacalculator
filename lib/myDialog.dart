@@ -104,3 +104,30 @@ class _MyDialogState extends State<MyDialog> {
     );
   }
 }
+
+// trailing: DropdownButton<String>(
+//                         value: dropdownValue[nameOfCourses[index]],
+//                         onChanged: (String? newValue) {
+//                           if (newValue != null) {
+//                             setState(() {
+//                               var temp = index;
+//                               // double result =
+//                               //     (courseWeight[index] * gradeValue[newValue]!) /
+//                               //         courseWeight.length;
+//                               dropdownValue[nameOfCourses[index]] = newValue;
+//                               gradingLetterValue = gradeValue[
+//                                   newValue]!; //here we update the gpa according to the letter value
+//                               // GPAValue += gradingLetterValue;
+//                               // GPAValue = result;
+//                             });
+//                           }
+//                         },
+//                         items: //here we pass the Grade value array
+//                             grades
+//                                 .map<DropdownMenuItem<String>>((String value) {
+//                           return DropdownMenuItem<String>(
+//                             value: value,
+//                             child: Text(value),
+//                           );
+//                         }).toList(),
+//                       ),
