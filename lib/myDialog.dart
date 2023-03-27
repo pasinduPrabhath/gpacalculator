@@ -35,50 +35,72 @@ class _MyDialogState extends State<MyDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select courses'),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                itemCount: courseData.length,
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                    title: Text(courseData[index].courseName),
-                    value: courseData[index].selected,
-                    onChanged: (value) {
-                      setState(() {
-                        courseData[index].selected = value!;
-                        if (value) {
-                          checkedItems.add(courseData[index].courseName);
-                          checkedItemsValues
-                              .add(courseData[index].weight.toDouble());
-                        } else {
-                          checkedItems.remove(courseData[index].courseName);
-                          checkedItemsValues
-                              .remove(courseData[index].weight.toDouble());
-                        }
-                      });
-                    },
-                  );
-                },
-              ),
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.looks_one_outlined)),
+                Tab(icon: Icon(Icons.looks_two_outlined)),
+                Tab(icon: Icon(Icons.looks_3_outlined)),
+                Tab(icon: Icon(Icons.looks_4_outlined)),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, {
-                  'items': checkedItems,
-                  'values': checkedItemsValues,
-                });
-              },
-              child: const Text('Done'),
-            ),
-          ],
+            title: const Text('Select courses'),
+          ),
+          body: TabBarView(
+            children: [
+              Center(child: checklistMenu1()),
+              Center(child: checklistMenu1()),
+              Icon(Icons.directions_bike),
+              Icon(Icons.abc)
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Column checklistMenu1() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            itemCount: courseData.length,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                title: Text(courseData[index].courseName),
+                value: courseData[index].selected,
+                onChanged: (value) {
+                  setState(() {
+                    courseData[index].selected = value!;
+                    if (value) {
+                      checkedItems.add(courseData[index].courseName);
+                      checkedItemsValues
+                          .add(courseData[index].weight.toDouble());
+                    } else {
+                      checkedItems.remove(courseData[index].courseName);
+                      checkedItemsValues
+                          .remove(courseData[index].weight.toDouble());
+                    }
+                  });
+                },
+              );
+            },
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, {
+              'items': checkedItems,
+              'values': checkedItemsValues,
+            });
+          },
+          child: const Text('Done'),
+        ),
+      ],
     );
   }
 }
