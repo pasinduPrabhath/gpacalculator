@@ -33,16 +33,41 @@ class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
   var GPAValue = 0.0;
   var checkBoxValue = <double>[];
-  var valueToCount = <double>[];
   final dropdownValue = <String, String>{};
-  String inputValue = 'made it';
-  List<String> items = <String>[];
-  List<double> values = <double>[];
+  List<String> nameOfCourses = <String>[];
+  List<double> numOfCredits = <double>[];
+  List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
+  double gradingLetterValue = 0.0;
+  Map<String, double> gradeValue = <String, double>{
+    'A': 4.0,
+    'B': 3.0,
+    'C': 2.0,
+    'D': 1.0,
+    'F': 0.0
+  };
+
+  // double _calculateGPA(double courseWeight, double gradingLetterValue) {
+  //   double totalCredits = 0;
+  //   double totalGPA = 0;
+  //   for (int i = 0; i < nameOfCourses.length; i++) {
+  //     if (checkBoxValue[i] != 0) {
+  //       totalCredits += courseWeight;
+  //       totalGPA += (courseWeight * gradingLetterValue);
+  //       print(totalCredits);
+  //     }
+  //   }
+  //   return totalGPA / totalCredits;
+  // }
+
+  //test
 
   Future<void> _getValue() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const MyDialog()),
+      MaterialPageRoute(
+          builder: (context) => const MyDialog(
+                title: '',
+              )),
     );
     if (result != null) {
       setState(() {
@@ -52,11 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
         final List<String> checked = checkBoxItem;
 
         for (int i = 0; i < checked.length; i++) {
-          if (!items.contains(checked[i])) {
-            items.add(checked[i]);
-            values.add(checkBoxValue[i]);
-            dropdownValue[checked[i]] = 'A';
-            GPAValue = values.reduce((a, b) => a + b);
+          if (!nameOfCourses.contains(checked[i])) {
+            nameOfCourses.add(checked[i]);
+            numOfCredits.add(checkBoxValue[i]);
+            // dropdownValue[checked[i]];
+            // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
         }
       });
@@ -95,14 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: ListView.builder(
-                itemCount: items.length,
+                itemCount: nameOfCourses.length,
                 itemBuilder: (context, index) => Dismissible(
-                  key: Key(items[index]),
+                  key: Key(nameOfCourses[index]),
                   onDismissed: (direction) {
                     setState(() {
-                      items.removeAt(index);
-                      double temp = values[index];
-                      values.removeAt(index);
+                      nameOfCourses.removeAt(index);
+                      double temp = numOfCredits[index];
+                      numOfCredits.removeAt(index);
                       GPAValue = GPAValue - temp;
                     });
                   },
@@ -113,18 +138,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   direction: DismissDirection.startToEnd,
                   child: ListTile(
-                    title: Center(child: Text(items[index])),
+                    title: Center(child: Text(nameOfCourses[index])),
                     trailing: DropdownButton<String>(
-                      value: dropdownValue[items[index]],
+                      value: dropdownValue[nameOfCourses[index]],
                       onChanged: (String? newValue) {
                         if (newValue != null) {
                           setState(() {
-                            dropdownValue[items[index]] = newValue;
+                            var temp = index;
+                            // double result =
+                            //     (courseWeight[index] * gradeValue[newValue]!) /
+                            //         courseWeight.length;
+                            dropdownValue[nameOfCourses[index]] = newValue;
+                            gradingLetterValue = gradeValue[
+                                newValue]!; //here we update the gpa according to the letter value
+                            // GPAValue += gradingLetterValue;
+                            // GPAValue = result;
                           });
                         }
                       },
-                      items: <String>['A', 'B', 'C', 'D', 'F']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: //here we pass the Grade value array
+                          grades.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),

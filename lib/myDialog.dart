@@ -13,7 +13,7 @@ class GPAData {
 }
 
 class MyDialog extends StatefulWidget {
-  const MyDialog({super.key});
+  const MyDialog({super.key, required String title});
 
   @override
   // ignore: library_private_types_in_public_api
