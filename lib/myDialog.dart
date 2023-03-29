@@ -22,16 +22,19 @@ class MyDialog extends StatefulWidget {
 
 class _MyDialogState extends State<MyDialog> {
   List<GPAData> courseData = [
-    GPAData(courseName: 'Programming', weight: 1, selected: false),
-    GPAData(courseName: 'DB', weight: 2, selected: false),
+    //use to pass selected course weight to main.dart
+    GPAData(courseName: 'Programming', weight: 3, selected: false),
+    GPAData(courseName: 'DB', weight: 3, selected: false),
     GPAData(courseName: 'Cloud', weight: 3, selected: false),
-    GPAData(courseName: 'AI', weight: 4, selected: false),
-    GPAData(courseName: 'ML', weight: 5, selected: false),
-    GPAData(courseName: 'Data Science', weight: 6, selected: false),
-    GPAData(courseName: 'Cyber Security', weight: 7, selected: false),
+    GPAData(courseName: 'AI', weight: 3, selected: false),
+    GPAData(courseName: 'ML', weight: 2, selected: false),
+    GPAData(courseName: 'Data Science', weight: 2, selected: false),
+    GPAData(courseName: 'Cyber Security', weight: 2, selected: false),
   ];
-  List<String> checkedItems = [];
-  List<double> checkedItemsValues = [];
+  // List<String> checkedItems = [];
+  // List<double> checkedItemsValues = [];
+
+  Map<String, double> selectedCourseData = <String, double>{};
 
   @override
   Widget build(BuildContext context) {
@@ -77,13 +80,16 @@ class _MyDialogState extends State<MyDialog> {
                   setState(() {
                     courseData[index].selected = value!;
                     if (value) {
-                      checkedItems.add(courseData[index].courseName);
-                      checkedItemsValues
-                          .add(courseData[index].weight.toDouble());
+                      // checkedItems.add(courseData[index].courseName);
+                      // checkedItemsValues
+                      //     .add(courseData[index].weight.toDouble());
+                      selectedCourseData[courseData[index].courseName] =
+                          courseData[index].weight.toDouble();
                     } else {
-                      checkedItems.remove(courseData[index].courseName);
-                      checkedItemsValues
-                          .remove(courseData[index].weight.toDouble());
+                      // checkedItems.remove(courseData[index].courseName);
+                      // checkedItemsValues
+                      //     .remove(courseData[index].weight.toDouble());
+                      selectedCourseData.remove(courseData[index].courseName);
                     }
                   });
                 },
@@ -93,10 +99,7 @@ class _MyDialogState extends State<MyDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context, {
-              'items': checkedItems,
-              'values': checkedItemsValues,
-            });
+            Navigator.pop(context, selectedCourseData);
           },
           child: const Text('Done'),
         ),
@@ -131,3 +134,7 @@ class _MyDialogState extends State<MyDialog> {
 //                           );
 //                         }).toList(),
 //                       ),
+//  {
+//               'items': checkedItems,
+//               'values': checkedItemsValues,
+//             }

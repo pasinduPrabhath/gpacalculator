@@ -32,10 +32,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
   var GPAValue = 0.0;
-  var checkBoxValue = <double>[];
   final dropdownValue = <String, String>{};
-  List<String> nameOfCourses = <String>[];
-  List<double> numOfCredits = <double>[];
+
+  Map<String, double> finalSelectedCourseData = <String, double>{};
+
   List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
   Map<String, double> gradeValue = <String, double>{
@@ -59,8 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //   return totalGPA / totalCredits;
   // }
 
-  //test
-
   Future<void> _getValue() async {
     final result = await Navigator.push(
       context,
@@ -71,15 +69,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (result != null) {
       setState(() {
-        final checkBoxItem = result['items'] as List<String>;
-        checkBoxValue = result['values'];
-
-        final List<String> checked = checkBoxItem;
-
-        for (int i = 0; i < checked.length; i++) {
-          if (!nameOfCourses.contains(checked[i])) {
-            nameOfCourses.add(checked[i]);
-            numOfCredits.add(checkBoxValue[i]);
+        Map<String, double> selectedCourseData = result;
+        for (int i = 0; i < selectedCourseData.length; i++) {
+          if (!finalSelectedCourseData
+              .containsKey(selectedCourseData.keys.elementAt(i))) {
+            finalSelectedCourseData.addAll(selectedCourseData);
             // dropdownValue[checked[i]];
             // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
@@ -120,15 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: ListView.builder(
-                itemCount: nameOfCourses.length,
+                itemCount: finalSelectedCourseData.length,
                 itemBuilder: (context, index) => Dismissible(
-                  key: Key(nameOfCourses[index]),
+                  key: Key(finalSelectedCourseData.keys.elementAt(index)),
                   onDismissed: (direction) {
                     setState(() {
-                      nameOfCourses.removeAt(index);
-                      double temp = numOfCredits[index];
-                      numOfCredits.removeAt(index);
-                      GPAValue = GPAValue - temp;
+                      finalSelectedCourseData.remove(
+                          finalSelectedCourseData.keys.elementAt(index));
+                      // GPAValue = GPAValue - temp;
                     });
                   },
                   background: Container(
@@ -139,7 +132,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   direction: DismissDirection.startToEnd,
                   child: Card(
                     child: ListTile(
-                      title: Center(child: Text(nameOfCourses[index])),
+                      title: Center(
+                          child: Text(
+                              finalSelectedCourseData.keys.elementAt(index))),
                     ),
                   ),
                 ),
