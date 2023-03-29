@@ -1,4 +1,6 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
+import './CustomCheckBoxDropdownTile.dart';
 
 class GPAData {
   final String courseName;
@@ -12,6 +14,17 @@ class GPAData {
   });
 }
 
+List<GPAData> courseData = [
+  //use to pass selected course weight to main.dart
+  GPAData(courseName: 'Programming', weight: 3, selected: false),
+  GPAData(courseName: 'DB', weight: 3, selected: false),
+  GPAData(courseName: 'Cloud', weight: 3, selected: false),
+  GPAData(courseName: 'AI', weight: 3, selected: false),
+  GPAData(courseName: 'ML', weight: 2, selected: false),
+  GPAData(courseName: 'Data Science', weight: 2, selected: false),
+  GPAData(courseName: 'Cyber Security', weight: 2, selected: false),
+];
+
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
 
@@ -21,20 +34,14 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<GPAData> courseData = [
-    //use to pass selected course weight to main.dart
-    GPAData(courseName: 'Programming', weight: 3, selected: false),
-    GPAData(courseName: 'DB', weight: 3, selected: false),
-    GPAData(courseName: 'Cloud', weight: 3, selected: false),
-    GPAData(courseName: 'AI', weight: 3, selected: false),
-    GPAData(courseName: 'ML', weight: 2, selected: false),
-    GPAData(courseName: 'Data Science', weight: 2, selected: false),
-    GPAData(courseName: 'Cyber Security', weight: 2, selected: false),
-  ];
-  // List<String> checkedItems = [];
-  // List<double> checkedItemsValues = [];
-
   Map<String, double> selectedCourseData = <String, double>{};
+  Map<String, double> gradeValue = <String, double>{
+    'A': 4.0,
+    'B': 3.0,
+    'C': 2.0,
+    'D': 1.0,
+    'F': 0.0
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -73,26 +80,21 @@ class _MyDialogState extends State<MyDialog> {
           child: ListView.builder(
             itemCount: courseData.length,
             itemBuilder: (context, index) {
-              return CheckboxListTile(
-                title: Text(courseData[index].courseName),
+              return CustomCheckboxDropdownTile(
+                title: courseData[index].courseName,
                 value: courseData[index].selected,
                 onChanged: (value) {
                   setState(() {
                     courseData[index].selected = value!;
                     if (value) {
-                      // checkedItems.add(courseData[index].courseName);
-                      // checkedItemsValues
-                      //     .add(courseData[index].weight.toDouble());
                       selectedCourseData[courseData[index].courseName] =
                           courseData[index].weight.toDouble();
                     } else {
-                      // checkedItems.remove(courseData[index].courseName);
-                      // checkedItemsValues
-                      //     .remove(courseData[index].weight.toDouble());
                       selectedCourseData.remove(courseData[index].courseName);
                     }
                   });
                 },
+                options: gradeValue.keys.toList(),
               );
             },
           ),
@@ -107,34 +109,3 @@ class _MyDialogState extends State<MyDialog> {
     );
   }
 }
-
-// trailing: DropdownButton<String>(
-//                         value: dropdownValue[nameOfCourses[index]],
-//                         onChanged: (String? newValue) {
-//                           if (newValue != null) {
-//                             setState(() {
-//                               var temp = index;
-//                               // double result =
-//                               //     (courseWeight[index] * gradeValue[newValue]!) /
-//                               //         courseWeight.length;
-//                               dropdownValue[nameOfCourses[index]] = newValue;
-//                               gradingLetterValue = gradeValue[
-//                                   newValue]!; //here we update the gpa according to the letter value
-//                               // GPAValue += gradingLetterValue;
-//                               // GPAValue = result;
-//                             });
-//                           }
-//                         },
-//                         items: //here we pass the Grade value array
-//                             grades
-//                                 .map<DropdownMenuItem<String>>((String value) {
-//                           return DropdownMenuItem<String>(
-//                             value: value,
-//                             child: Text(value),
-//                           );
-//                         }).toList(),
-//                       ),
-//  {
-//               'items': checkedItems,
-//               'values': checkedItemsValues,
-//             }

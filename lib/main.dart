@@ -33,31 +33,28 @@ class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
   var GPAValue = 0.0;
   final dropdownValue = <String, String>{};
+  String selectedGradeLetter = 'A';
 
   Map<String, double> finalSelectedCourseData = <String, double>{};
 
   List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
-  Map<String, double> gradeValue = <String, double>{
-    'A': 4.0,
-    'B': 3.0,
-    'C': 2.0,
-    'D': 1.0,
-    'F': 0.0
-  };
 
-  // double _calculateGPA(double courseWeight, double gradingLetterValue) {
-  //   double totalCredits = 0;
-  //   double totalGPA = 0;
-  //   for (int i = 0; i < nameOfCourses.length; i++) {
-  //     if (checkBoxValue[i] != 0) {
-  //       totalCredits += courseWeight;
-  //       totalGPA += (courseWeight * gradingLetterValue);
-  //       print(totalCredits);
-  //     }
-  //   }
-  //   return totalGPA / totalCredits;
-  // }
+  double _calculateGPA(Map<String, double> selectedCourseData) {
+    double totalCredits = 0;
+    double totalGPA = 0;
+    double weightedGradePoints = 0;
+    for (int i = 0; i < finalSelectedCourseData.length; i++) {
+      if (finalSelectedCourseData.keys.elementAt(i) != '') {
+        totalCredits += finalSelectedCourseData.values.elementAt(i);
+        // weightedGradePoints += finalSelectedCourseData.values.elementAt(i) * gradeValue[grades[i]];
+        // totalGPA += (courseWeight * gradingLetterValue);
+        print(totalCredits);
+      }
+      GPAValue = totalCredits;
+    }
+    return totalCredits;
+  }
 
   Future<void> _getValue() async {
     final result = await Navigator.push(
@@ -74,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (!finalSelectedCourseData
               .containsKey(selectedCourseData.keys.elementAt(i))) {
             finalSelectedCourseData.addAll(selectedCourseData);
+            _calculateGPA(finalSelectedCourseData);
             // dropdownValue[checked[i]];
             // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
@@ -119,9 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: Key(finalSelectedCourseData.keys.elementAt(index)),
                   onDismissed: (direction) {
                     setState(() {
+                      GPAValue = GPAValue -
+                          finalSelectedCourseData.values.elementAt(index);
                       finalSelectedCourseData.remove(
                           finalSelectedCourseData.keys.elementAt(index));
-                      // GPAValue = GPAValue - temp;
                     });
                   },
                   background: Container(
@@ -133,8 +132,38 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Card(
                     child: ListTile(
                       title: Center(
-                          child: Text(
-                              finalSelectedCourseData.keys.elementAt(index))),
+                        child: Text(
+                          finalSelectedCourseData.keys.elementAt(index),
+                        ),
+                      ),
+                      // trailing: DropdownButton<String>(
+                      //   value: selectedGradeLetter,
+                      //   onChanged: (String? newValue) {
+                      //     if (newValue != null) {
+                      //       setState(() {
+                      //         // var temp = index;
+                      //         // double result =
+                      //         //     (courseWeight[index] * gradeValue[newValue]!) /
+                      //         //         courseWeight.length;
+                      //         // dropdownValue[nameOfCourses[index]] = newValue;
+                      //         selectedGradeLetter = newValue;
+                      //         gradingLetterValue = gradeValue[
+                      //             newValue]!; //here we update the gpa according to the letter value
+                      //         // GPAValue += gradingLetterValue;
+                      //         // GPAValue = result;
+                      //         print(gradingLetterValue);
+                      //       });
+                      //     }
+                      //   },
+                      //   items: //here we pass the Grade value array
+                      //       grades
+                      //           .map<DropdownMenuItem<String>>((String value) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: value,
+                      //       child: Text(value),
+                      //     );
+                      //   }).toList(),
+                      // ),
                     ),
                   ),
                 ),
