@@ -5,25 +5,34 @@ import './CustomCheckBoxDropdownTile.dart';
 class GPAData {
   final String courseName;
   final double weight;
+  String gradePoints;
   bool selected;
 
   GPAData({
     required this.courseName,
     required this.weight,
+    required this.gradePoints,
     required this.selected,
   });
 }
 
 List<GPAData> courseData = [
   //use to pass selected course weight to main.dart
-  GPAData(courseName: 'Programming', weight: 3, selected: false),
-  GPAData(courseName: 'DB', weight: 3, selected: false),
-  GPAData(courseName: 'Cloud', weight: 3, selected: false),
-  GPAData(courseName: 'AI', weight: 3, selected: false),
-  GPAData(courseName: 'ML', weight: 2, selected: false),
-  GPAData(courseName: 'Data Science', weight: 2, selected: false),
-  GPAData(courseName: 'Cyber Security', weight: 2, selected: false),
+  GPAData(
+      courseName: 'Programming', weight: 3, gradePoints: '', selected: false),
+  GPAData(courseName: 'DB', weight: 3, gradePoints: '', selected: false),
+  GPAData(courseName: 'Cloud', weight: 3, gradePoints: '', selected: false),
+  GPAData(courseName: 'AI', weight: 3, gradePoints: '', selected: false),
+  GPAData(courseName: 'ML', weight: 2, gradePoints: '', selected: false),
+  GPAData(
+      courseName: 'Data Science', weight: 2, gradePoints: '', selected: false),
+  GPAData(
+      courseName: 'Cyber Security',
+      weight: 2,
+      gradePoints: '',
+      selected: false),
 ];
+String selectedGradeLetter = 'A';
 
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
@@ -89,6 +98,8 @@ class _MyDialogState extends State<MyDialog> {
                     if (value) {
                       selectedCourseData[courseData[index].courseName] =
                           courseData[index].weight.toDouble();
+                      courseData[index].gradePoints = selectedGradeLetter;
+                      print(selectedGradeLetter);
                     } else {
                       selectedCourseData.remove(courseData[index].courseName);
                     }

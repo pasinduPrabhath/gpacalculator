@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import './myDialog.dart';
 
 class CustomCheckboxDropdownTile extends StatefulWidget {
   final String title;
@@ -50,6 +51,7 @@ class _CustomCheckboxDropdownTileState
               onChanged: (String? value) {
                 setState(() {
                   _selectedOption = value!;
+                  selectedGradeLetter = _selectedOption;
                 });
               },
               items: widget.options

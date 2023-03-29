@@ -132,38 +132,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Card(
                     child: ListTile(
                       title: Center(
-                        child: Text(
-                          finalSelectedCourseData.keys.elementAt(index),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.06,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                '${finalSelectedCourseData.keys.elementAt(index)} (${finalSelectedCourseData.values.elementAt(index).toInt()} Credits)',
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 2.0,
+                                ),
+                              ),
+                              padding: const EdgeInsets.only(
+                                  left: 5.0, right: 5.0, top: 2.0, bottom: 2),
+                              child: const Text(
+                                'A',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.08,
+                            ),
+                          ],
                         ),
                       ),
-                      // trailing: DropdownButton<String>(
-                      //   value: selectedGradeLetter,
-                      //   onChanged: (String? newValue) {
-                      //     if (newValue != null) {
-                      //       setState(() {
-                      //         // var temp = index;
-                      //         // double result =
-                      //         //     (courseWeight[index] * gradeValue[newValue]!) /
-                      //         //         courseWeight.length;
-                      //         // dropdownValue[nameOfCourses[index]] = newValue;
-                      //         selectedGradeLetter = newValue;
-                      //         gradingLetterValue = gradeValue[
-                      //             newValue]!; //here we update the gpa according to the letter value
-                      //         // GPAValue += gradingLetterValue;
-                      //         // GPAValue = result;
-                      //         print(gradingLetterValue);
-                      //       });
-                      //     }
-                      //   },
-                      //   items: //here we pass the Grade value array
-                      //       grades
-                      //           .map<DropdownMenuItem<String>>((String value) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: value,
-                      //       child: Text(value),
-                      //     );
-                      //   }).toList(),
-                      // ),
                     ),
                   ),
                 ),
