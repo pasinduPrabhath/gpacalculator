@@ -35,18 +35,19 @@ class _MyHomePageState extends State<MyHomePage> {
   final dropdownValue = <String, String>{};
   String selectedGradeLetter = 'A';
 
-  Map<String, double> finalSelectedCourseData = <String, double>{};
+  Map<String, double> finalSelectedCourseDataOLD = <String, double>{};
+  List<GPAData> finalSelectedCourseDataList = <GPAData>[];
 
   List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
 
-  double _calculateGPA(Map<String, double> selectedCourseData) {
+  double _calculateGPA(List<GPAData> finalSelectedCourseData) {
     double totalCredits = 0;
     double totalGPA = 0;
     double weightedGradePoints = 0;
     for (int i = 0; i < finalSelectedCourseData.length; i++) {
-      if (finalSelectedCourseData.keys.elementAt(i) != '') {
-        totalCredits += finalSelectedCourseData.values.elementAt(i);
+      if (finalSelectedCourseData[i].courseName != '') {
+        totalCredits += finalSelectedCourseDataOLD.values.elementAt(i);
         // weightedGradePoints += finalSelectedCourseData.values.elementAt(i) * gradeValue[grades[i]];
         // totalGPA += (courseWeight * gradingLetterValue);
         print(totalCredits);
@@ -66,12 +67,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (result != null) {
       setState(() {
-        Map<String, double> selectedCourseData = result;
+        List<GPAData> selectedCourseData = result;
         for (int i = 0; i < selectedCourseData.length; i++) {
-          if (!finalSelectedCourseData
-              .containsKey(selectedCourseData.keys.elementAt(i))) {
-            finalSelectedCourseData.addAll(selectedCourseData);
-            _calculateGPA(finalSelectedCourseData);
+          if (finalSelectedCourseDataList.contains(selectedCourseData[i])) {
+            finalSelectedCourseDataList[i].gradingLetter =
+                selectedCourseData[i].gradingLetter;
+            finalSelectedCourseDataList[i].gradingLetterValue =
+                selectedCourseData[i].gradingLetterValue;
+            // finalSelectedCourseDataList[i] = selectedCourseData[i];
+          }
+          if (selectedCourseData[i].selected == true &&
+              !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
+            finalSelectedCourseDataList.add(selectedCourseData[i]);
+            // _calculateGPA(finalSelectedCourseDataList);
             // dropdownValue[checked[i]];
             // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
@@ -112,15 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: ListView.builder(
-                itemCount: finalSelectedCourseData.length,
+                itemCount: finalSelectedCourseDataList.length,
                 itemBuilder: (context, index) => Dismissible(
-                  key: Key(finalSelectedCourseData.keys.elementAt(index)),
+                  key: Key(finalSelectedCourseDataList[index].courseName),
                   onDismissed: (direction) {
                     setState(() {
                       GPAValue = GPAValue -
-                          finalSelectedCourseData.values.elementAt(index);
-                      finalSelectedCourseData.remove(
-                          finalSelectedCourseData.keys.elementAt(index));
+                          finalSelectedCourseDataList[index].gradingLetterValue;
+                      finalSelectedCourseDataList
+                          .remove(finalSelectedCourseDataList[index]);
                     });
                   },
                   background: Container(
@@ -140,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${finalSelectedCourseData.keys.elementAt(index)} (${finalSelectedCourseData.values.elementAt(index).toInt()} Credits)',
+                                '${finalSelectedCourseDataList[index].courseName}  Credits)',
                               ),
                             ),
                             Container(
@@ -152,9 +160,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               padding: const EdgeInsets.only(
                                   left: 5.0, right: 5.0, top: 2.0, bottom: 2),
-                              child: const Text(
-                                'A',
-                                style: TextStyle(fontSize: 16.0),
+                              child: Text(
+                                finalSelectedCourseDataList[index]
+                                    .gradingLetter,
+                                style: const TextStyle(fontSize: 16.0),
                               ),
                             ),
                             SizedBox(

@@ -39,35 +39,39 @@ class _CustomCheckboxDropdownTileState
         children: [
           Expanded(
             flex: 4,
-            child: Text(
-              widget.title,
-            ),
+            child: Text(widget.title),
           ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Checkbox(
+                  value: widget.value,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      widget.onChanged(value);
+                    });
+                  },
+                ),
+                DropdownButton<String>(
+                  value: _selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedOption = value!;
+                      selectedGradeLetter = _selectedOption;
 
-          Expanded(
-            flex: 2,
-            child: DropdownButton(
-              value: _selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedOption = value!;
-                  selectedGradeLetter = _selectedOption;
-                });
-              },
-              items: widget.options
-                  .map((option) => DropdownMenuItem(
-                        value: option,
-                        child: Text(option),
-                      ))
-                  .toList(),
-            ),
-          ),
-          // SizedBox(width: 16),
-          Expanded(
-            flex: 1,
-            child: Checkbox(
-              value: widget.value,
-              onChanged: widget.onChanged,
+                      print('customwidget ' + selectedGradeLetter);
+                    });
+                  },
+                  items: widget.options
+                      .map((option) => DropdownMenuItem(
+                            value: option,
+                            child: Text(option),
+                          ))
+                      .toList(),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.17),
+              ],
             ),
           ),
         ],

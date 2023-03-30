@@ -5,13 +5,15 @@ import './CustomCheckBoxDropdownTile.dart';
 class GPAData {
   final String courseName;
   final double weight;
-  String gradePoints;
+  String gradingLetter;
+  double gradingLetterValue;
   bool selected;
 
   GPAData({
     required this.courseName,
     required this.weight,
-    required this.gradePoints,
+    required this.gradingLetter,
+    required this.gradingLetterValue,
     required this.selected,
   });
 }
@@ -19,19 +21,50 @@ class GPAData {
 List<GPAData> courseData = [
   //use to pass selected course weight to main.dart
   GPAData(
-      courseName: 'Programming', weight: 3, gradePoints: '', selected: false),
-  GPAData(courseName: 'DB', weight: 3, gradePoints: '', selected: false),
-  GPAData(courseName: 'Cloud', weight: 3, gradePoints: '', selected: false),
-  GPAData(courseName: 'AI', weight: 3, gradePoints: '', selected: false),
-  GPAData(courseName: 'ML', weight: 2, gradePoints: '', selected: false),
+      courseName: 'Programming',
+      weight: 3,
+      gradingLetter: 'A-',
+      gradingLetterValue: 0.2,
+      selected: false),
   GPAData(
-      courseName: 'Data Science', weight: 2, gradePoints: '', selected: false),
+      courseName: 'DB',
+      weight: 3,
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Cloud',
+      weight: 3,
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'AI',
+      weight: 3,
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'ML',
+      weight: 2,
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Data Science',
+      weight: 2,
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
+      selected: false),
   GPAData(
       courseName: 'Cyber Security',
       weight: 2,
-      gradePoints: '',
+      gradingLetter: 'A',
+      gradingLetterValue: 0,
       selected: false),
 ];
+
+List<GPAData> selectedCourseData = [];
 String selectedGradeLetter = 'A';
 
 class MyDialog extends StatefulWidget {
@@ -43,7 +76,7 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  Map<String, double> selectedCourseData = <String, double>{};
+  Map<String, double> selectedOld = <String, double>{};
   Map<String, double> gradeValue = <String, double>{
     'A': 4.0,
     'B': 3.0,
@@ -94,14 +127,19 @@ class _MyDialogState extends State<MyDialog> {
                 value: courseData[index].selected,
                 onChanged: (value) {
                   setState(() {
+                    // courseData[index].gradingLetter = selectedGradeLetter;
                     courseData[index].selected = value!;
                     if (value) {
-                      selectedCourseData[courseData[index].courseName] =
-                          courseData[index].weight.toDouble();
-                      courseData[index].gradePoints = selectedGradeLetter;
-                      print(selectedGradeLetter);
+                      courseData[index].selected = true;
+                      //     courseData[index].weight.toDouble();
+                      print('mydialog ' + selectedGradeLetter);
+
+                      courseData[index].gradingLetter = selectedGradeLetter;
+
+                      // print(selectedCourseData[index].courseName);
                     } else {
-                      selectedCourseData.remove(courseData[index].courseName);
+                      // selectedCourseData.remove(courseData[index]);
+                      courseData[index].selected = false;
                     }
                   });
                 },
@@ -112,7 +150,7 @@ class _MyDialogState extends State<MyDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context, selectedCourseData);
+            Navigator.pop(context, courseData);
           },
           child: const Text('Done'),
         ),
