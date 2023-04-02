@@ -23,49 +23,50 @@ List<GPAData> courseData = [
   GPAData(
       courseName: 'Programming',
       weight: 3,
-      gradingLetter: 'A-',
-      gradingLetterValue: 0.2,
+      gradingLetter: '',
+      gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'DB',
       weight: 3,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Cloud',
       weight: 3,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'AI',
       weight: 3,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'ML',
       weight: 2,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Data Science',
       weight: 2,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Cyber Security',
       weight: 2,
-      gradingLetter: 'A',
+      gradingLetter: '',
       gradingLetterValue: 0,
       selected: false),
 ];
 
 List<GPAData> selectedCourseData = [];
 String selectedGradeLetter = 'A';
+bool doesSelected = false;
 
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
@@ -125,20 +126,16 @@ class _MyDialogState extends State<MyDialog> {
               return CustomCheckboxDropdownTile(
                 title: courseData[index].courseName,
                 value: courseData[index].selected,
-                onChanged: (value) {
+                onChanged: (value, selectedValue) {
+                  // Accept two arguments
                   setState(() {
-                    // courseData[index].gradingLetter = selectedGradeLetter;
                     courseData[index].selected = value!;
                     if (value) {
-                      courseData[index].selected = true;
-                      //     courseData[index].weight.toDouble();
-                      print('mydialog ' + selectedGradeLetter);
-
-                      courseData[index].gradingLetter = selectedGradeLetter;
-
-                      // print(selectedCourseData[index].courseName);
+                      // courseData[index].selected = true;
+                      courseData[index].gradingLetter =
+                          selectedValue; // update grading letter
+                      print('mydialog ' + selectedValue);
                     } else {
-                      // selectedCourseData.remove(courseData[index]);
                       courseData[index].selected = false;
                     }
                   });

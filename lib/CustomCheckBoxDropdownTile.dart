@@ -5,19 +5,19 @@ import './myDialog.dart';
 class CustomCheckboxDropdownTile extends StatefulWidget {
   final String title;
   final bool value;
-  final Function(bool?) onChanged;
+  final Function(bool?, dynamic)
+      onChanged; // Change the callback type to accept two arguments
   final List<String> options;
 
   const CustomCheckboxDropdownTile({
-    super.key,
+    Key? key,
     required this.title,
     required this.value,
     required this.onChanged,
     required this.options,
-  });
+  }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomCheckboxDropdownTileState createState() =>
       _CustomCheckboxDropdownTileState();
 }
@@ -29,7 +29,7 @@ class _CustomCheckboxDropdownTileState
   @override
   void initState() {
     super.initState();
-    _selectedOption = widget.options[0];
+    _selectedOption = 'F';
   }
 
   @override
@@ -45,22 +45,14 @@ class _CustomCheckboxDropdownTileState
             flex: 3,
             child: Row(
               children: [
-                Checkbox(
-                  value: widget.value,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      widget.onChanged(value);
-                    });
-                  },
-                ),
                 DropdownButton<String>(
                   value: _selectedOption,
                   onChanged: (String? value) {
                     setState(() {
                       _selectedOption = value!;
-                      selectedGradeLetter = _selectedOption;
-
-                      print('customwidget ' + selectedGradeLetter);
+                      widget.onChanged(true,
+                          _selectedOption); // Pass two arguments to the callback
+                      print(_selectedOption);
                     });
                   },
                   items: widget.options

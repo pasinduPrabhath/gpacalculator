@@ -41,21 +41,21 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
 
-  double _calculateGPA(List<GPAData> finalSelectedCourseData) {
-    double totalCredits = 0;
-    double totalGPA = 0;
-    double weightedGradePoints = 0;
-    for (int i = 0; i < finalSelectedCourseData.length; i++) {
-      if (finalSelectedCourseData[i].courseName != '') {
-        totalCredits += finalSelectedCourseDataOLD.values.elementAt(i);
-        // weightedGradePoints += finalSelectedCourseData.values.elementAt(i) * gradeValue[grades[i]];
-        // totalGPA += (courseWeight * gradingLetterValue);
-        print(totalCredits);
-      }
-      GPAValue = totalCredits;
-    }
-    return totalCredits;
-  }
+  // double _calculateGPA(List<GPAData> finalSelectedCourseData) {
+  //   double totalCredits = 0;
+  //   double totalGPA = 0;
+  //   double weightedGradePoints = 0;
+  //   for (int i = 0; i < finalSelectedCourseData.length; i++) {
+  //     if (finalSelectedCourseData[i].courseName != '') {
+  //       totalCredits += finalSelectedCourseDataOLD.values.elementAt(i);
+  //       // weightedGradePoints += finalSelectedCourseData.values.elementAt(i) * gradeValue[grades[i]];
+  //       // totalGPA += (courseWeight * gradingLetterValue);
+  //       print(totalCredits);
+  //     }
+  //     GPAValue = totalCredits;
+  //   }
+  //   return totalCredits;
+  // }
 
   Future<void> _getValue() async {
     final result = await Navigator.push(
@@ -69,14 +69,16 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         List<GPAData> selectedCourseData = result;
         for (int i = 0; i < selectedCourseData.length; i++) {
-          if (finalSelectedCourseDataList.contains(selectedCourseData[i])) {
-            finalSelectedCourseDataList[i].gradingLetter =
-                selectedCourseData[i].gradingLetter;
-            finalSelectedCourseDataList[i].gradingLetterValue =
-                selectedCourseData[i].gradingLetterValue;
+          if (finalSelectedCourseDataList.length >= i &&
+              finalSelectedCourseDataList.contains(selectedCourseData[i])) {
+            // finalSelectedCourseDataList[i].gradingLetter =
+            //     selectedCourseData[i].gradingLetter;
+            // finalSelectedCourseDataList[i].gradingLetterValue =
+            //     selectedCourseData[i].gradingLetterValue;
             // finalSelectedCourseDataList[i] = selectedCourseData[i];
           }
           if (selectedCourseData[i].selected == true &&
+              // finalSelectedCourseDataList.length >= i &&
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
             finalSelectedCourseDataList.add(selectedCourseData[i]);
             // _calculateGPA(finalSelectedCourseDataList);
