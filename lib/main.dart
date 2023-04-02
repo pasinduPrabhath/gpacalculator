@@ -35,27 +35,29 @@ class _MyHomePageState extends State<MyHomePage> {
   final dropdownValue = <String, String>{};
   String selectedGradeLetter = 'A';
 
-  Map<String, double> finalSelectedCourseDataOLD = <String, double>{};
   List<GPAData> finalSelectedCourseDataList = <GPAData>[];
 
   List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
 
-  // double _calculateGPA(List<GPAData> finalSelectedCourseData) {
-  //   double totalCredits = 0;
-  //   double totalGPA = 0;
-  //   double weightedGradePoints = 0;
-  //   for (int i = 0; i < finalSelectedCourseData.length; i++) {
-  //     if (finalSelectedCourseData[i].courseName != '') {
-  //       totalCredits += finalSelectedCourseDataOLD.values.elementAt(i);
-  //       // weightedGradePoints += finalSelectedCourseData.values.elementAt(i) * gradeValue[grades[i]];
-  //       // totalGPA += (courseWeight * gradingLetterValue);
-  //       print(totalCredits);
-  //     }
-  //     GPAValue = totalCredits;
-  //   }
-  //   return totalCredits;
-  // }
+  double _calculateGPA(List<GPAData> finalSelectedCourseData) {
+    double totalCredits = 0;
+    double totalGPA = 0;
+    double weightedGradePoints = 0;
+    for (int i = 0; i < finalSelectedCourseData.length; i++) {
+      if (finalSelectedCourseData[i].courseName != '') {
+        totalCredits += finalSelectedCourseData[i].weight;
+        // GPAValue = totalCredits;
+        weightedGradePoints += finalSelectedCourseData[i].weight *
+            finalSelectedCourseData[i].gradingLetterValue;
+        print('weightedGradePoints $weightedGradePoints');
+        totalGPA += (finalSelectedCourseData[i].weight * gradingLetterValue);
+        print(totalCredits);
+      }
+      GPAValue = weightedGradePoints / totalCredits;
+    }
+    return GPAValue;
+  }
 
   Future<void> _getValue() async {
     final result = await Navigator.push(
@@ -69,22 +71,16 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         List<GPAData> selectedCourseData = result;
         for (int i = 0; i < selectedCourseData.length; i++) {
-          if (finalSelectedCourseDataList.length >= i &&
-              finalSelectedCourseDataList.contains(selectedCourseData[i])) {
-            // finalSelectedCourseDataList[i].gradingLetter =
-            //     selectedCourseData[i].gradingLetter;
-            // finalSelectedCourseDataList[i].gradingLetterValue =
-            //     selectedCourseData[i].gradingLetterValue;
-            // finalSelectedCourseDataList[i] = selectedCourseData[i];
-          }
           if (selectedCourseData[i].selected == true &&
-              // finalSelectedCourseDataList.length >= i &&
+              selectedCourseData[i].gradingLetter != 'X' &&
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
             finalSelectedCourseDataList.add(selectedCourseData[i]);
+
             // _calculateGPA(finalSelectedCourseDataList);
             // dropdownValue[checked[i]];
             // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
+          _calculateGPA(finalSelectedCourseDataList);
         }
       });
     }
@@ -127,10 +123,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: Key(finalSelectedCourseDataList[index].courseName),
                   onDismissed: (direction) {
                     setState(() {
-                      GPAValue = GPAValue -
-                          finalSelectedCourseDataList[index].gradingLetterValue;
+                      finalSelectedCourseDataList[index].selected = false;
+
                       finalSelectedCourseDataList
                           .remove(finalSelectedCourseDataList[index]);
+
+                      if (finalSelectedCourseDataList.isEmpty) {
+                        GPAValue = 0.0;
+                      }
+                      _calculateGPA(finalSelectedCourseDataList);
                     });
                   },
                   background: Container(
@@ -150,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${finalSelectedCourseDataList[index].courseName}  Credits)',
+                                '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
                               ),
                             ),
                             Container(

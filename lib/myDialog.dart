@@ -23,50 +23,67 @@ List<GPAData> courseData = [
   GPAData(
       courseName: 'Programming',
       weight: 3,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'DB',
       weight: 3,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Cloud',
       weight: 3,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'AI',
       weight: 3,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'ML',
       weight: 2,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Data Science',
       weight: 2,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
   GPAData(
       courseName: 'Cyber Security',
       weight: 2,
-      gradingLetter: '',
+      gradingLetter: 'X',
       gradingLetterValue: 0,
       selected: false),
 ];
 
 List<GPAData> selectedCourseData = [];
-String selectedGradeLetter = 'A';
 bool doesSelected = false;
+
+_gradingLetterValue(String selectedGradeLetter) {
+  if (selectedGradeLetter == 'A') {
+    return 4.0;
+  } else if (selectedGradeLetter == 'B') {
+    return 3.0;
+  } else if (selectedGradeLetter == 'C') {
+    return 2.0;
+  } else if (selectedGradeLetter == 'D') {
+    return 1.0;
+  } else if (selectedGradeLetter == 'F') {
+    return 0.0;
+  } else if (selectedGradeLetter == 'X') {
+    return 0.01;
+  } else {
+    return 0.0;
+  }
+}
 
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
@@ -77,13 +94,13 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  Map<String, double> selectedOld = <String, double>{};
   Map<String, double> gradeValue = <String, double>{
     'A': 4.0,
     'B': 3.0,
     'C': 2.0,
     'D': 1.0,
-    'F': 0.0
+    'F': 0.0,
+    'X': 0.0
   };
 
   @override
@@ -132,9 +149,11 @@ class _MyDialogState extends State<MyDialog> {
                     courseData[index].selected = value!;
                     if (value) {
                       // courseData[index].selected = true;
+
                       courseData[index].gradingLetter =
                           selectedValue; // update grading letter
-                      print('mydialog ' + selectedValue);
+                      courseData[index].gradingLetterValue =
+                          _gradingLetterValue(selectedValue);
                     } else {
                       courseData[index].selected = false;
                     }

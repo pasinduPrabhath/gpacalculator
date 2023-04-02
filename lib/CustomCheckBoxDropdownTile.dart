@@ -1,6 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import './myDialog.dart';
+import 'package:gpacalculator/myDialog.dart';
 
 class CustomCheckboxDropdownTile extends StatefulWidget {
   final String title;
@@ -18,6 +18,7 @@ class CustomCheckboxDropdownTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomCheckboxDropdownTileState createState() =>
       _CustomCheckboxDropdownTileState();
 }
@@ -29,7 +30,7 @@ class _CustomCheckboxDropdownTileState
   @override
   void initState() {
     super.initState();
-    _selectedOption = 'F';
+    _selectedOption = 'X';
   }
 
   @override
@@ -37,8 +38,9 @@ class _CustomCheckboxDropdownTileState
     return ListTile(
       title: Row(
         children: [
+          SizedBox(width: MediaQuery.of(context).size.width * 0.07),
           Expanded(
-            flex: 4,
+            flex: 7,
             child: Text(widget.title),
           ),
           Expanded(
@@ -49,10 +51,13 @@ class _CustomCheckboxDropdownTileState
                   value: _selectedOption,
                   onChanged: (String? value) {
                     setState(() {
-                      _selectedOption = value!;
-                      widget.onChanged(true,
-                          _selectedOption); // Pass two arguments to the callback
-                      print(_selectedOption);
+                      if (value != 'X') {
+                        _selectedOption = value!;
+                        widget.onChanged(true,
+                            _selectedOption); // Pass two arguments to the callback
+                      }
+
+                      print('Selected :' + _selectedOption);
                     });
                   },
                   items: widget.options
