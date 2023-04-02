@@ -42,21 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   double _calculateGPA(List<GPAData> finalSelectedCourseData) {
     double totalCredits = 0;
-    double totalGPA = 0;
     double weightedGradePoints = 0;
     for (int i = 0; i < finalSelectedCourseData.length; i++) {
       if (finalSelectedCourseData[i].courseName != '') {
         totalCredits += finalSelectedCourseData[i].weight;
-        // GPAValue = totalCredits;
         weightedGradePoints += finalSelectedCourseData[i].weight *
             finalSelectedCourseData[i].gradingLetterValue;
-        print('weightedGradePoints $weightedGradePoints');
-        totalGPA += (finalSelectedCourseData[i].weight * gradingLetterValue);
-        print(totalCredits);
       }
       GPAValue = weightedGradePoints / totalCredits;
     }
     return GPAValue;
+    ;
   }
 
   Future<void> _getValue() async {
@@ -75,10 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedCourseData[i].gradingLetter != 'X' &&
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
             finalSelectedCourseDataList.add(selectedCourseData[i]);
-
-            // _calculateGPA(finalSelectedCourseDataList);
-            // dropdownValue[checked[i]];
-            // GPAValue = courseWeight.reduce((a, b) => a + b);
           }
           _calculateGPA(finalSelectedCourseDataList);
         }
@@ -100,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const SizedBox(),
             ),
             Text(
-              GPAValue.toString(),
+              GPAValue.toStringAsFixed(2),
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -115,64 +107,67 @@ class _MyHomePageState extends State<MyHomePage> {
               'Courses List',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: ListView.builder(
-                itemCount: finalSelectedCourseDataList.length,
-                itemBuilder: (context, index) => Dismissible(
-                  key: Key(finalSelectedCourseDataList[index].courseName),
-                  onDismissed: (direction) {
-                    setState(() {
-                      finalSelectedCourseDataList[index].selected = false;
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: ListView.builder(
+                  itemCount: finalSelectedCourseDataList.length,
+                  itemBuilder: (context, index) => Dismissible(
+                    key: Key(finalSelectedCourseDataList[index].courseName),
+                    onDismissed: (direction) {
+                      setState(() {
+                        finalSelectedCourseDataList[index].selected = false;
 
-                      finalSelectedCourseDataList
-                          .remove(finalSelectedCourseDataList[index]);
+                        finalSelectedCourseDataList
+                            .remove(finalSelectedCourseDataList[index]);
 
-                      if (finalSelectedCourseDataList.isEmpty) {
-                        GPAValue = 0.0;
-                      }
-                      _calculateGPA(finalSelectedCourseDataList);
-                    });
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  direction: DismissDirection.startToEnd,
-                  child: Card(
-                    child: ListTile(
-                      title: Center(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
+                        if (finalSelectedCourseDataList.isEmpty) {
+                          GPAValue = 0.0;
+                        }
+                        _calculateGPA(finalSelectedCourseDataList);
+                      });
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    direction: DismissDirection.startToEnd,
+                    child: Card(
+                      child: ListTile(
+                        title: Center(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.06,
                               ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 2.0,
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
                                 ),
                               ),
-                              padding: const EdgeInsets.only(
-                                  left: 5.0, right: 5.0, top: 2.0, bottom: 2),
-                              child: Text(
-                                finalSelectedCourseDataList[index]
-                                    .gradingLetter,
-                                style: const TextStyle(fontSize: 16.0),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                padding: const EdgeInsets.only(
+                                    left: 5.0, right: 5.0, top: 2.0, bottom: 2),
+                                child: Text(
+                                  finalSelectedCourseDataList[index]
+                                      .gradingLetter,
+                                  style: const TextStyle(fontSize: 16.0),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.08,
-                            ),
-                          ],
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.08,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

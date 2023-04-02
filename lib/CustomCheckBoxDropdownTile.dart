@@ -5,8 +5,7 @@ import 'package:gpacalculator/myDialog.dart';
 class CustomCheckboxDropdownTile extends StatefulWidget {
   final String title;
   final bool value;
-  final Function(bool?, dynamic)
-      onChanged; // Change the callback type to accept two arguments
+  final Function(bool?, dynamic) onChanged;
   final List<String> options;
 
   const CustomCheckboxDropdownTile({
@@ -26,11 +25,13 @@ class CustomCheckboxDropdownTile extends StatefulWidget {
 class _CustomCheckboxDropdownTileState
     extends State<CustomCheckboxDropdownTile> {
   late String _selectedOption;
+  late String _newCourseName;
 
   @override
   void initState() {
     super.initState();
     _selectedOption = 'X';
+    _newCourseName = '';
   }
 
   @override
@@ -55,6 +56,7 @@ class _CustomCheckboxDropdownTileState
                         _selectedOption = value!;
                         widget.onChanged(true,
                             _selectedOption); // Pass two arguments to the callback
+                        _newCourseName = '';
                       }
 
                       print('Selected :' + _selectedOption);
@@ -68,6 +70,16 @@ class _CustomCheckboxDropdownTileState
                       .toList(),
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.17),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'New course',
+                    ),
+                    onChanged: (value) {
+                      _newCourseName = value;
+                    },
+                  ),
+                ),
               ],
             ),
           ),

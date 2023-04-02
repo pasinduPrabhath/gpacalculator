@@ -136,6 +136,9 @@ class _MyDialogState extends State<MyDialog> {
   Column checklistMenu1() {
     return Column(
       children: <Widget>[
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: courseData.length,
@@ -144,12 +147,9 @@ class _MyDialogState extends State<MyDialog> {
                 title: courseData[index].courseName,
                 value: courseData[index].selected,
                 onChanged: (value, selectedValue) {
-                  // Accept two arguments
                   setState(() {
                     courseData[index].selected = value!;
                     if (value) {
-                      // courseData[index].selected = true;
-
                       courseData[index].gradingLetter =
                           selectedValue; // update grading letter
                       courseData[index].gradingLetterValue =
@@ -164,11 +164,43 @@ class _MyDialogState extends State<MyDialog> {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context, courseData);
-          },
-          child: const Text('Done'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            //   child: const Text('Cancel'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pop(context, courseData);
+            //   },
+            //   child: const Text('Done'),
+            // ),
+            // FloatingActionButton(
+            //   onPressed: () {},
+            //   child: const Icon(Icons.done),
+            // ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context, courseData);
+              },
+              heroTag: 'addCourse',
+              child: const Icon(Icons.add),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context, courseData);
+              },
+              heroTag: 'submitCourse',
+              child: const Icon(Icons.done),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.05,
         ),
       ],
     );
