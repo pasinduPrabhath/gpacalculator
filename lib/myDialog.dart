@@ -64,9 +64,6 @@ List<GPAData> courseData = [
       selected: false),
 ];
 
-List<GPAData> selectedCourseData = [];
-bool doesSelected = false;
-
 _gradingLetterValue(String selectedGradeLetter) {
   if (selectedGradeLetter == 'A') {
     return 4.0;
@@ -94,14 +91,7 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  Map<String, double> gradeValue = <String, double>{
-    'A': 4.0,
-    'B': 3.0,
-    'C': 2.0,
-    'D': 1.0,
-    'F': 0.0,
-    'X': 0.0
-  };
+  List<String> gradeValue = ['A', 'B', 'C', 'D', 'F', 'X'];
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +149,7 @@ class _MyDialogState extends State<MyDialog> {
                     }
                   });
                 },
-                options: gradeValue.keys.toList(),
+                options: gradeValue,
               );
             },
           ),
@@ -167,22 +157,6 @@ class _MyDialogState extends State<MyDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //   },
-            //   child: const Text('Cancel'),
-            // ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pop(context, courseData);
-            //   },
-            //   child: const Text('Done'),
-            // ),
-            // FloatingActionButton(
-            //   onPressed: () {},
-            //   child: const Icon(Icons.done),
-            // ),
             FloatingActionButton(
               onPressed: () {
                 Navigator.pop(context, courseData);
