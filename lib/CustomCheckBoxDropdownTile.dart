@@ -25,13 +25,11 @@ class CustomCheckboxDropdownTile extends StatefulWidget {
 class _CustomCheckboxDropdownTileState
     extends State<CustomCheckboxDropdownTile> {
   late String _selectedOption;
-  late String _newCourseName;
 
   @override
   void initState() {
     super.initState();
-    _selectedOption = 'X';
-    _newCourseName = '';
+    _selectedOption = 'B';
   }
 
   @override
@@ -56,10 +54,9 @@ class _CustomCheckboxDropdownTileState
                         _selectedOption = value!;
                         widget.onChanged(true,
                             _selectedOption); // Pass two arguments to the callback
-                        _newCourseName = '';
                       }
 
-                      print('Selected :' + _selectedOption);
+                      // print('Selected :' + _selectedOption);
                     });
                   },
                   items: widget.options
@@ -68,18 +65,9 @@ class _CustomCheckboxDropdownTileState
                             child: Text(option),
                           ))
                       .toList(),
+                  menuMaxHeight: MediaQuery.of(context).size.height * 0.2,
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.17),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'New course',
-                    ),
-                    onChanged: (value) {
-                      _newCourseName = value;
-                    },
-                  ),
-                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.13),
               ],
             ),
           ),

@@ -37,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<GPAData> finalSelectedCourseDataList = <GPAData>[];
 
-  List<String> grades = <String>['A', 'B', 'C', 'D', 'F'];
   double gradingLetterValue = 0.0;
 
   double _calculateGPA(List<GPAData> finalSelectedCourseData) {
@@ -149,18 +148,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               Container(
+                                constraints: const BoxConstraints(
+                                  minWidth: 35, // set a minimum width
+                                  maxWidth: 35, // set a maximum width
+                                ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.black,
-                                    width: 2.0,
+                                    width: double.minPositive,
                                   ),
                                 ),
                                 padding: const EdgeInsets.only(
                                     left: 5.0, right: 5.0, top: 2.0, bottom: 2),
-                                child: Text(
-                                  finalSelectedCourseDataList[index]
-                                      .gradingLetter,
-                                  style: const TextStyle(fontSize: 16.0),
+                                child: Center(
+                                  child: Text(
+                                    finalSelectedCourseDataList[index]
+                                        .gradingLetter,
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
                                 ),
                               ),
                               SizedBox(

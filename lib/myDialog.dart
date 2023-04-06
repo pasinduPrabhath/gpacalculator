@@ -65,15 +65,29 @@ List<GPAData> courseData = [
 ];
 
 _gradingLetterValue(String selectedGradeLetter) {
-  if (selectedGradeLetter == 'A') {
+  if (selectedGradeLetter == 'A+') {
     return 4.0;
+  } else if (selectedGradeLetter == 'A') {
+    return 4.0;
+  } else if (selectedGradeLetter == 'A-') {
+    return 3.7;
+  } else if (selectedGradeLetter == 'B+') {
+    return 3.3;
   } else if (selectedGradeLetter == 'B') {
     return 3.0;
+  } else if (selectedGradeLetter == 'B-') {
+    return 2.7;
+  } else if (selectedGradeLetter == 'C+') {
+    return 2.3;
   } else if (selectedGradeLetter == 'C') {
     return 2.0;
+  } else if (selectedGradeLetter == 'C-') {
+    return 1.7;
+  } else if (selectedGradeLetter == 'D+') {
+    return 1.3;
   } else if (selectedGradeLetter == 'D') {
     return 1.0;
-  } else if (selectedGradeLetter == 'F') {
+  } else if (selectedGradeLetter == 'E') {
     return 0.0;
   } else if (selectedGradeLetter == 'X') {
     return 0.01;
@@ -91,7 +105,22 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<String> gradeValue = ['A', 'B', 'C', 'D', 'F', 'X'];
+  List<String> gradeValue = [
+    'A+',
+    'A',
+    'A-',
+    'B+',
+    'B',
+    'B-',
+    'C+',
+    'C',
+    'C-',
+    'D+',
+    'D',
+    'E',
+    'X'
+  ];
+  late String _newCourseName;
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +186,7 @@ class _MyDialogState extends State<MyDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.pop(context, courseData);
-              },
-              heroTag: 'addCourse',
-              child: const Icon(Icons.add),
-            ),
+            addNewCourse(),
             FloatingActionButton(
               onPressed: () {
                 Navigator.pop(context, courseData);
@@ -177,6 +200,80 @@ class _MyDialogState extends State<MyDialog> {
           height: MediaQuery.of(context).size.height * 0.05,
         ),
       ],
+    );
+  }
+
+  FloatingActionButton addNewCourse() {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            String courseName = '';
+            double? courseWeight;
+
+            return AlertDialog(
+              title: const Text('Enter New Course Details'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Course Name',
+                    ),
+                    onChanged: (value) {
+                      courseName = value;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Course Weight',
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      courseWeight = double.tryParse(value);
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (courseName.isNotEmpty && courseWeight != null) {
+                      Map<String, dynamic> courseData = {
+                        'name': courseName,
+                        'weight': courseWeight,
+                      };
+                      Navigator.pop(context, courseData);
+                    }
+                  },
+                  child: const Text('Add'),
+                ),
+              ],
+            );
+          },
+        ).then((value) {
+          // Handle the result here
+          if (value != null) {
+            // Do something with the added course data
+            courseData.add(GPAData(
+                courseName: value['name'],
+                weight: value['weight'],
+                gradingLetter: 'X',
+                gradingLetterValue: 0,
+                selected: false));
+          }
+        });
+      },
+      heroTag: 'addCourse',
+      child: const Icon(Icons.add),
     );
   }
 }
