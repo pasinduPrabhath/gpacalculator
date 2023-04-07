@@ -55,7 +55,6 @@ class _CustomCheckboxDropdownTileState
                         widget.onChanged(true,
                             _selectedOption); // Pass two arguments to the callback
                       }
-
                       // print('Selected :' + _selectedOption);
                     });
                   },
@@ -65,7 +64,11 @@ class _CustomCheckboxDropdownTileState
                             child: Text(option),
                           ))
                       .toList(),
+                  alignment: FractionalOffset.centerRight,
+                  elevation: 8,
                   menuMaxHeight: MediaQuery.of(context).size.height * 0.2,
+
+                  // alignment: Alignment.center,
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.13),
               ],

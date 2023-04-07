@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:gpacalculator/main.dart';
 import './CustomCheckBoxDropdownTile.dart';
 
 class GPAData {
@@ -18,7 +19,7 @@ class GPAData {
   });
 }
 
-List<GPAData> courseData = [
+List<GPAData> lvl1CourseData = [
   //use to pass selected course weight to main.dart
   GPAData(
       courseName: 'Programming',
@@ -58,6 +59,52 @@ List<GPAData> courseData = [
       selected: false),
   GPAData(
       courseName: 'Cyber Security',
+      weight: 2,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+];
+
+List<GPAData> lvl2CourseData = [
+  //use to pass selected course weight to main.dart
+  GPAData(
+      courseName: 'Infromation System Modeling',
+      weight: 3,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Cloud Computing',
+      weight: 3,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Design Patterns',
+      weight: 2,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'AI',
+      weight: 3,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Software Architecture',
+      weight: 2,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Mobile Applications Development',
+      weight: 2,
+      gradingLetter: 'X',
+      gradingLetterValue: 0,
+      selected: false),
+  GPAData(
+      courseName: 'Web Development 2',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
@@ -104,7 +151,9 @@ class MyDialog extends StatefulWidget {
   _MyDialogState createState() => _MyDialogState();
 }
 
-class _MyDialogState extends State<MyDialog> {
+class _MyDialogState extends State<MyDialog>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   List<String> gradeValue = [
     'A+',
     'A',
@@ -123,13 +172,37 @@ class _MyDialogState extends State<MyDialog> {
   late String _newCourseName;
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    setState(() {
+      // Update the selected tab index here
+      // You can get the selected tab index from _tabController.index
+      if (_tabController.index != _tabController.previousIndex) {
+        print('tab index is changing');
+        // if (_tabController.previousIndex == 0) {
+        //   Navigator.pop(context, lvl1CourseData);
+        // } else if (_tabController.previousIndex == 1) {
+        //   Navigator.pop(context, lvl2CourseData);
+        // }
+      }
+      print('tab index: ${_tabController.index}');
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
+            bottom: TabBar(
+              controller: _tabController,
               tabs: [
                 Tab(icon: Icon(Icons.looks_one_outlined)),
                 Tab(icon: Icon(Icons.looks_two_outlined)),
@@ -140,19 +213,34 @@ class _MyDialogState extends State<MyDialog> {
             title: const Text('Select courses'),
           ),
           body: TabBarView(
+            controller: _tabController,
             children: [
-              Center(child: checklistMenu1()),
-              Center(child: checklistMenu1()),
+              Center(child: level1Menu()),
+              Center(child: level2Menu()),
               Icon(Icons.directions_bike),
               Icon(Icons.abc)
             ],
+          ),
+          bottomNavigationBar: BottomAppBar(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                addNewCourse(),
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context, lvl2CourseData);
+                  },
+                  child: const Icon(Icons.done_outlined),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Column checklistMenu1() {
+  Column level1Menu() {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -160,51 +248,70 @@ class _MyDialogState extends State<MyDialog> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: courseData.length,
-            itemBuilder: (context, index) {
-              return CustomCheckboxDropdownTile(
-                title: courseData[index].courseName,
-                value: courseData[index].selected,
-                onChanged: (value, selectedValue) {
-                  setState(() {
-                    courseData[index].selected = value!;
-                    if (value) {
-                      courseData[index].gradingLetter =
-                          selectedValue; // update grading letter
-                      courseData[index].gradingLetterValue =
-                          _gradingLetterValue(selectedValue);
-                    } else {
-                      courseData[index].selected = false;
-                    }
-                  });
-                },
-                options: gradeValue,
-              );
-            },
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            addNewCourse(),
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.pop(context, courseData);
-              },
-              heroTag: 'submitCourse',
-              child: const Icon(Icons.done),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.05,
+              itemCount: lvl1CourseData.length,
+              itemBuilder: (context, index) {
+                return CustomCheckboxDropdownTile(
+                  title: lvl1CourseData[index].courseName,
+                  value: lvl1CourseData[index].selected,
+                  onChanged: (value, selectedValue) {
+                    setState(() {
+                      lvl1CourseData[index].selected = value!;
+                      if (value) {
+                        lvl1CourseData[index].gradingLetter =
+                            selectedValue; // update grading letter
+
+                        lvl1CourseData[index].gradingLetterValue =
+                            _gradingLetterValue(selectedValue);
+                      } else {
+                        lvl1CourseData[index].selected = false;
+                      }
+                    });
+                  },
+                  options: gradeValue,
+                );
+              }),
         ),
       ],
     );
   }
 
-  FloatingActionButton addNewCourse() {
-    return FloatingActionButton(
+  Column level2Menu() {
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.02,
+        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: lvl2CourseData.length,
+              itemBuilder: (context, index) {
+                return CustomCheckboxDropdownTile(
+                  title: lvl2CourseData[index].courseName,
+                  value: lvl2CourseData[index].selected,
+                  onChanged: (value, selectedValue) {
+                    setState(() {
+                      lvl2CourseData[index].selected = value!;
+                      if (value) {
+                        lvl2CourseData[index].gradingLetter =
+                            selectedValue; // update grading letter
+
+                        lvl2CourseData[index].gradingLetterValue =
+                            _gradingLetterValue(selectedValue);
+                      } else {
+                        lvl2CourseData[index].selected = false;
+                      }
+                    });
+                  },
+                  options: gradeValue,
+                );
+              }),
+        ),
+      ],
+    );
+  }
+
+  OutlinedButton addNewCourse() {
+    return OutlinedButton(
       onPressed: () {
         showDialog(
           context: context,
@@ -263,7 +370,8 @@ class _MyDialogState extends State<MyDialog> {
           // Handle the result here
           if (value != null) {
             // Do something with the added course data
-            courseData.add(GPAData(
+            // finalSelectedCourseDataList.add(value);
+            lvl1CourseData.add(GPAData(
                 courseName: value['name'],
                 weight: value['weight'],
                 gradingLetter: 'X',
@@ -272,7 +380,6 @@ class _MyDialogState extends State<MyDialog> {
           }
         });
       },
-      heroTag: 'addCourse',
       child: const Icon(Icons.add),
     );
   }

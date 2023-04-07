@@ -5,6 +5,8 @@ void main() {
   runApp(const MyApp());
 }
 
+List<GPAData> finalSelectedCourseDataList = <GPAData>[];
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.
@@ -34,8 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   var GPAValue = 0.0;
   final dropdownValue = <String, String>{};
   String selectedGradeLetter = 'A';
-
-  List<GPAData> finalSelectedCourseDataList = <GPAData>[];
 
   double gradingLetterValue = 0.0;
 
