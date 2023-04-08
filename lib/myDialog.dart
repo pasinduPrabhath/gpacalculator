@@ -228,7 +228,7 @@ class _MyDialogState extends State<MyDialog>
                 addNewCourse(),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.pop(context, lvl2CourseData);
+                    Navigator.pop(context, lvl1CourseData);
                   },
                   child: const Icon(Icons.done_outlined),
                 ),
