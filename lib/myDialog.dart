@@ -111,6 +111,7 @@ List<GPAData> lvl2CourseData = [
       selected: false),
 ];
 
+List<GPAData> parsingCourseData = [];
 _gradingLetterValue(String selectedGradeLetter) {
   if (selectedGradeLetter == 'A+') {
     return 4.0;
@@ -184,11 +185,22 @@ class _MyDialogState extends State<MyDialog>
       // You can get the selected tab index from _tabController.index
       if (_tabController.index != _tabController.previousIndex) {
         print('tab index is changing');
-        // if (_tabController.previousIndex == 0) {
-        //   Navigator.pop(context, lvl1CourseData);
-        // } else if (_tabController.previousIndex == 1) {
-        //   Navigator.pop(context, lvl2CourseData);
-        // }
+        if (_tabController.previousIndex == 0) {
+          for (int i = 0; i < lvl1CourseData.length; i++) {
+            if (lvl1CourseData[i].selected == true &&
+                !parsingCourseData.contains(lvl1CourseData[i])) {
+              parsingCourseData.add(lvl1CourseData[i]);
+            }
+          }
+        }
+      }
+      if (_tabController.previousIndex == 1) {
+        for (int i = 0; i < lvl1CourseData.length; i++) {
+          if (lvl1CourseData[i].selected == true &&
+              !parsingCourseData.contains(lvl2CourseData[i])) {
+            parsingCourseData.add(lvl1CourseData[i]);
+          }
+        }
       }
       print('tab index: ${_tabController.index}');
     });
@@ -228,7 +240,8 @@ class _MyDialogState extends State<MyDialog>
                 addNewCourse(),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.pop(context, lvl1CourseData);
+                    print('data is  + $parsingCourseData');
+                    Navigator.pop(context, parsingCourseData);
                   },
                   child: const Icon(Icons.done_outlined),
                 ),
