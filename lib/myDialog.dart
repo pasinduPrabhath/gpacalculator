@@ -170,7 +170,7 @@ class _MyDialogState extends State<MyDialog>
     'E',
     'X'
   ];
-  late String _newCourseName;
+  // late String _newCourseName;
 
   @override
   void initState() {
