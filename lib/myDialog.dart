@@ -184,7 +184,7 @@ class _MyDialogState extends State<MyDialog>
       // Update the selected tab index here
       // You can get the selected tab index from _tabController.index
       if (_tabController.index != _tabController.previousIndex) {
-        print('tab index is changing');
+        // print('tab index is changing');
         if (_tabController.previousIndex == 0) {
           for (int i = 0; i < lvl1CourseData.length; i++) {
             if (lvl1CourseData[i].selected == true &&
