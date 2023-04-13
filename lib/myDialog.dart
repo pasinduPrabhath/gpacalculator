@@ -144,6 +144,16 @@ _gradingLetterValue(String selectedGradeLetter) {
   }
 }
 
+void handleTabSelection(List<GPAData> lvlxCourseData, parsingCourseData) {
+  for (int i = 0; i < lvlxCourseData.length; i++) {
+    if (lvlxCourseData[i].selected == true &&
+        !parsingCourseData.contains(lvlxCourseData[i])) {
+      print(lvlxCourseData[i]);
+      parsingCourseData.add(lvlxCourseData[i]);
+    }
+  }
+}
+
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
 
@@ -176,34 +186,7 @@ class _MyDialogState extends State<MyDialog>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-  }
-
-  void _handleTabSelection() {
-    setState(() {
-      // Update the selected tab index here
-      // You can get the selected tab index from _tabController.index
-      if (_tabController.index != _tabController.previousIndex) {
-        // print('tab index is changing');
-        if (_tabController.previousIndex == 0) {
-          for (int i = 0; i < lvl1CourseData.length; i++) {
-            if (lvl1CourseData[i].selected == true &&
-                !parsingCourseData.contains(lvl1CourseData[i])) {
-              parsingCourseData.add(lvl1CourseData[i]);
-            }
-          }
-        }
-      }
-      if (_tabController.previousIndex == 1) {
-        for (int i = 0; i < lvl1CourseData.length; i++) {
-          if (lvl1CourseData[i].selected == true &&
-              !parsingCourseData.contains(lvl2CourseData[i])) {
-            parsingCourseData.add(lvl1CourseData[i]);
-          }
-        }
-      }
-      print('tab index: ${_tabController.index}');
-    });
+    // _tabController.addListener(_handleTabSelection);
   }
 
   @override
@@ -215,7 +198,7 @@ class _MyDialogState extends State<MyDialog>
           appBar: AppBar(
             bottom: TabBar(
               controller: _tabController,
-              tabs: [
+              tabs: const [
                 Tab(icon: Icon(Icons.looks_one_outlined)),
                 Tab(icon: Icon(Icons.looks_two_outlined)),
                 Tab(icon: Icon(Icons.looks_3_outlined)),
@@ -240,7 +223,23 @@ class _MyDialogState extends State<MyDialog>
                 addNewCourse(),
                 OutlinedButton(
                   onPressed: () {
-                    print('data is  + $parsingCourseData');
+                    switch (_tabController.index) {
+                      case 0:
+                        handleTabSelection(lvl1CourseData, parsingCourseData);
+                        break;
+                      case 1:
+                        handleTabSelection(lvl2CourseData, parsingCourseData);
+                        break;
+                      // case 2:
+                      //   handleTabSelection(lvl3CourseData, parsingCourseData);
+                      //   break;
+                      // case 3:
+                      //   handleTabSelection(lvl4CourseData, parsingCourseData);
+                      //   break;
+                      default:
+                        handleTabSelection(lvl1CourseData, parsingCourseData);
+                    }
+
                     Navigator.pop(context, parsingCourseData);
                   },
                   child: const Icon(Icons.done_outlined),
