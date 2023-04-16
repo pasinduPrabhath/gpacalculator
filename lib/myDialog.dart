@@ -1,6 +1,5 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:gpacalculator/main.dart';
 import './CustomCheckBoxDropdownTile.dart';
 
 //second screen
@@ -131,6 +130,7 @@ List<GPAData> lvl4CourseData = [
 ];
 
 List<GPAData> parsingCourseData = [];
+int selectedCoursesCount = 0;
 _gradingLetterValue(String selectedGradeLetter) {
   if (selectedGradeLetter == 'A+') {
     return 4.0;
@@ -163,14 +163,33 @@ _gradingLetterValue(String selectedGradeLetter) {
   }
 }
 
-// void handleTabSelection(List<GPAData> lvl1CourseData,lvl2CourseData,lvl3CourseData,lvl4CourseData parsingCourseData) {
-//   for (int i = 0; i < lvlxCourseData.length; i++) {
-//     if (lvlxCourseData[i].selected == true &&
-//         !parsingCourseData.contains(lvlxCourseData[i])) {
-//       parsingCourseData.add(lvlxCourseData[i]);
-//     }
-//   }
-// }
+void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
+    lvl3CourseData, lvl4CourseData, parsingCourseData) {
+  for (int i = 0; i < lvl1CourseData.length; i++) {
+    if (lvl1CourseData[i].selected == true &&
+        !parsingCourseData.contains(lvl1CourseData[i])) {
+      parsingCourseData.add(lvl1CourseData[i]);
+    }
+  }
+  for (int i = 0; i < lvl2CourseData.length; i++) {
+    if (lvl2CourseData[i].selected == true &&
+        !parsingCourseData.contains(lvl2CourseData[i])) {
+      parsingCourseData.add(lvl2CourseData[i]);
+    }
+  }
+  for (int i = 0; i < lvl3CourseData.length; i++) {
+    if (lvl3CourseData[i].selected == true &&
+        !parsingCourseData.contains(lvl3CourseData[i])) {
+      parsingCourseData.add(lvl3CourseData[i]);
+    }
+  }
+  for (int i = 0; i < lvl4CourseData.length; i++) {
+    if (lvl4CourseData[i].selected == true &&
+        !parsingCourseData.contains(lvl4CourseData[i])) {
+      parsingCourseData.add(lvl4CourseData[i]);
+    }
+  }
+}
 
 class MyDialog extends StatefulWidget {
   const MyDialog({super.key, required String title});
@@ -241,23 +260,8 @@ class _MyDialogState extends State<MyDialog>
                 addNewCourse(),
                 OutlinedButton(
                   onPressed: () {
-                    // switch (_tabController.index) {
-                    //   case 0:
-                    //     handleTabSelection(lvl1CourseData, parsingCourseData);
-                    //     break;
-                    //   case 1:
-                    //     handleTabSelection(lvl2CourseData, parsingCourseData);
-                    //     break;
-                    //   case 2:
-                    //     handleTabSelection(lvl3CourseData, parsingCourseData);
-                    //     break;
-                    //   case 3:
-                    //     handleTabSelection(lvl4CourseData, parsingCourseData);
-                    //     break;
-                    //   default:
-                    //     handleTabSelection(lvl1CourseData, parsingCourseData);
-                    // }
-                    // handleTabSelection(lvl1CourseData,,lvl2CourseData,lvl3CourseData,lvl4CourseData, parsingCourseData);
+                    handleTabSelection(lvl1CourseData, lvl2CourseData,
+                        lvl3CourseData, lvl4CourseData, parsingCourseData);
                     Navigator.pop(context, parsingCourseData);
                   },
                   child: const Icon(Icons.done_outlined),
@@ -469,14 +473,42 @@ class _MyDialogState extends State<MyDialog>
         ).then((value) {
           // Handle the result here
           if (value != null) {
-            // Do something with the added course data
-            // finalSelectedCourseDataList.add(value);
-            lvl1CourseData.add(GPAData(
-                courseName: value['name'],
-                weight: value['weight'],
-                gradingLetter: 'X',
-                gradingLetterValue: 0,
-                selected: false));
+            int selectedLevel = _tabController.index + 1;
+            switch (selectedLevel) {
+              case 1:
+                lvl1CourseData.add(GPAData(
+                    courseName: value['name'],
+                    weight: value['weight'],
+                    gradingLetter: 'X',
+                    gradingLetterValue: 0,
+                    selected: false));
+                break;
+              case 2:
+                lvl2CourseData.add(GPAData(
+                    courseName: value['name'],
+                    weight: value['weight'],
+                    gradingLetter: 'X',
+                    gradingLetterValue: 0,
+                    selected: false));
+                break;
+              case 3:
+                lvl3CourseData.add(GPAData(
+                    courseName: value['name'],
+                    weight: value['weight'],
+                    gradingLetter: 'X',
+                    gradingLetterValue: 0,
+                    selected: false));
+                break;
+              case 4:
+                lvl4CourseData.add(GPAData(
+                    courseName: value['name'],
+                    weight: value['weight'],
+                    gradingLetter: 'X',
+                    gradingLetterValue: 0,
+                    selected: false));
+                break;
+              default:
+            }
           }
         });
       },
