@@ -5,6 +5,7 @@ void main() {
   runApp(const MyApp());
 }
 
+//this is the main screen
 List<GPAData> finalSelectedCourseDataList = <GPAData>[];
 
 class MyApp extends StatelessWidget {
@@ -30,7 +31,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-//show dialog box 1.... 
+//show dialog box 1....
 class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
   var GPAValue = 0.0;
