@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpacalculator/sql_helper.dart';
 import 'myDialog.dart';
 
 void main() {
@@ -7,6 +8,7 @@ void main() {
 
 //this is the main screen
 List<GPAData> finalSelectedCourseDataList = <GPAData>[];
+//new database List map
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,10 +54,23 @@ class _MyHomePageState extends State<MyHomePage> {
       GPAValue = weightedGradePoints / totalCredits;
     }
     return GPAValue;
-    ;
+  }
+
+  List<Map<String, dynamic>>? _newDatabaseListMap = <Map<String, dynamic>>[];
+  bool _isLoading = false;
+  void _refresh() async {
+    final data = await SQLHelper.getItems();
+    setState(() {
+      _newDatabaseListMap = data;
+      _isLoading = false;
+    });
   }
 
   Future<void> _getValue() async {
+    SQLHelper.createItem(1, 'test1', 3.0, 'A', 2.7, 1);
+    print(SQLHelper.getItems());
+    _refresh();
+    print('..... no of itmes in db ${_newDatabaseListMap!.length}');
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
