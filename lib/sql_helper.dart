@@ -88,6 +88,7 @@ class SQLHelper {
     return result;
   }
 
+// db.execSQL("delete from "+ TABLE_NAME);
   // Delete
   static Future<void> deleteItem(int id) async {
     final db = await SQLHelper.db();

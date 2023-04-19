@@ -56,21 +56,39 @@ class _MyHomePageState extends State<MyHomePage> {
     return GPAValue;
   }
 
-  List<Map<String, dynamic>>? _newDatabaseListMap = <Map<String, dynamic>>[];
+  List<Map<String, dynamic>> _newDatabaseListMap = <Map<String, dynamic>>[];
   bool _isLoading = false;
-  void _refresh() async {
-    final data = await SQLHelper.getItems();
+  Future<void> _refresh() async {
+    _newDatabaseListMap = await SQLHelper.getItems();
+    List<GPAData> list = [];
+    for (var element in _newDatabaseListMap) {
+      list.add(GPAData(
+        level: element['level'],
+        // id: element['id'],
+        courseName: element['courseName'],
+        weight: element['courseWeight'],
+        gradingLetter: element['gradingLetter'],
+        gradingLetterValue: element['gradingLetterValue'],
+        selected: element['selected'] == 1 ? 1 : 0,
+      ));
+    }
     setState(() {
-      _newDatabaseListMap = data;
-      _isLoading = false;
+      finalSelectedCourseDataList = list;
     });
+    _calculateGPA(finalSelectedCourseDataList);
   }
 
   Future<void> _getValue() async {
-    SQLHelper.createItem(1, 'test1', 3.0, 'A', 2.7, 1);
-    print(SQLHelper.getItems());
+    // SQLHelper.createItem(1, 'test1', 3.0, 'A', 2.7, 1);
+    // print(SQLHelper.getItems());
+    // SQLHelper.deleteItem()
     _refresh();
-    print('..... no of itmes in db ${_newDatabaseListMap!.length}');
+    // print('data have been recieved from db data is : $_newDatabaseListMap');
+    // print('..... no of itmes in db ${_newDatabaseListMap!.length}');
+    // _newDatabaseListMap!.forEach((element) {
+    //   print('element is $element');
+    // });
+    // var x = _newDatabaseListMap![0]['courseName'];
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -82,15 +100,32 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         List<GPAData> selectedCourseData = result;
         for (int i = 0; i < selectedCourseData.length; i++) {
-          if (selectedCourseData[i].selected == true &&
+          if (selectedCourseData[i].selected == 1 &&
               selectedCourseData[i].gradingLetter != 'X' &&
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
-            finalSelectedCourseDataList.add(selectedCourseData[i]);
+            // List<GPAData> data = SQLHelper.getItems() as List<GPAData>; //error
+            // print('data from db issss $data');s
+            finalSelectedCourseDataList.add(selectedCourseData[
+                i]); //place where the all selected courses are stored
+            SQLHelper.createItem(
+                1,
+                selectedCourseData[i].courseName,
+                selectedCourseData[i].weight,
+                selectedCourseData[i].gradingLetter,
+                selectedCourseData[i].gradingLetterValue,
+                1);
           }
           _calculateGPA(finalSelectedCourseDataList);
         }
       });
+      _refresh();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
   }
 
   @override
@@ -132,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     key: Key(finalSelectedCourseDataList[index].courseName),
                     onDismissed: (direction) {
                       setState(() {
-                        finalSelectedCourseDataList[index].selected = false;
+                        finalSelectedCourseDataList[index].selected = 0;
 
                         finalSelectedCourseDataList
                             .remove(finalSelectedCourseDataList[index]);
@@ -160,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
+                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].gradingLetterValue.toInt()} Credits)',
                                 ),
                               ),
                               Container(

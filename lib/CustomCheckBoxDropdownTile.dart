@@ -5,8 +5,8 @@ import 'package:gpacalculator/myDialog.dart';
 //second screen widget
 class CustomCheckboxDropdownTile extends StatefulWidget {
   final String title;
-  final bool value;
-  final Function(bool?, dynamic) onChanged;
+  final int value;
+  final Function(int?, dynamic) onChanged;
   final List<String> options;
 
   const CustomCheckboxDropdownTile({
@@ -53,7 +53,7 @@ class _CustomCheckboxDropdownTileState
                     setState(() {
                       if (value != 'X') {
                         _selectedOption = value!;
-                        widget.onChanged(true,
+                        widget.onChanged(1,
                             _selectedOption); // Pass two arguments to the callback
                       }
                       // print('Selected :' + _selectedOption);

@@ -1,16 +1,19 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:gpacalculator/sql_helper.dart';
 import './CustomCheckBoxDropdownTile.dart';
 
 //second screen
 class GPAData {
+  final int level;
   final String courseName;
   final double weight;
   String gradingLetter;
   double gradingLetterValue;
-  bool selected;
+  int selected;
 
   GPAData({
+    required this.level,
     required this.courseName,
     required this.weight,
     required this.gradingLetter,
@@ -22,111 +25,127 @@ class GPAData {
 List<GPAData> lvl1CourseData = [
   //use to pass selected course weight to main.dart
   GPAData(
+      level: 1,
       courseName: 'Programming',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'DB',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'Cloud',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'AI',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'ML',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'Data Science',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 1,
       courseName: 'Cyber Security',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
 ];
 
 List<GPAData> lvl2CourseData = [
   //use to pass selected course weight to main.dart
   GPAData(
+      level: 2,
       courseName: 'Infromation System Modeling',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'Cloud Computing',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'Design Patterns',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'AI',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'Software Architecture',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'Mobile Applications Development',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
   GPAData(
+      level: 2,
       courseName: 'Web Development 2',
       weight: 2,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
 ];
 List<GPAData> lvl3CourseData = [
   //use to pass selected course weight to main.dart
   GPAData(
+      level: 3,
       courseName: 'Big Data',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
 ];
 List<GPAData> lvl4CourseData = [
   //use to pass selected course weight to main.dart
   GPAData(
+      level: 4,
       courseName: 'Image Processing',
       weight: 3,
       gradingLetter: 'X',
       gradingLetterValue: 0,
-      selected: false),
+      selected: 0),
 ];
 
 List<GPAData> parsingCourseData = [];
@@ -166,9 +185,17 @@ _gradingLetterValue(String selectedGradeLetter) {
 void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
     lvl3CourseData, lvl4CourseData, parsingCourseData) {
   for (int i = 0; i < lvl1CourseData.length; i++) {
-    if (lvl1CourseData[i].selected == true &&
+    if (lvl1CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl1CourseData[i])) {
       parsingCourseData.add(lvl1CourseData[i]);
+      SQLHelper.createItem(
+          lvl1CourseData[i].level,
+          lvl1CourseData[i].courseName,
+          lvl1CourseData[i].weight,
+          lvl1CourseData[i].gradingLetter,
+          lvl1CourseData[i].gradingLetterValue,
+          1);
+      print('inserted data ' + SQLHelper.getItem(0).toString());
     }
   }
   for (int i = 0; i < lvl2CourseData.length; i++) {
@@ -290,14 +317,14 @@ class _MyDialogState extends State<MyDialog>
                   onChanged: (value, selectedValue) {
                     setState(() {
                       lvl1CourseData[index].selected = value!;
-                      if (value) {
+                      if (value == 1) {
                         lvl1CourseData[index].gradingLetter =
                             selectedValue; // update grading letter
 
                         lvl1CourseData[index].gradingLetterValue =
                             _gradingLetterValue(selectedValue);
                       } else {
-                        lvl1CourseData[index].selected = false;
+                        lvl1CourseData[index].selected = 0;
                       }
                     });
                   },
@@ -325,14 +352,14 @@ class _MyDialogState extends State<MyDialog>
                   onChanged: (value, selectedValue) {
                     setState(() {
                       lvl2CourseData[index].selected = value!;
-                      if (value) {
+                      if (value == 1) {
                         lvl2CourseData[index].gradingLetter =
                             selectedValue; // update grading letter
 
                         lvl2CourseData[index].gradingLetterValue =
                             _gradingLetterValue(selectedValue);
                       } else {
-                        lvl2CourseData[index].selected = false;
+                        lvl2CourseData[index].selected = 0;
                       }
                     });
                   },
@@ -360,14 +387,14 @@ class _MyDialogState extends State<MyDialog>
                   onChanged: (value, selectedValue) {
                     setState(() {
                       lvl3CourseData[index].selected = value!;
-                      if (value) {
+                      if (value == 1) {
                         lvl3CourseData[index].gradingLetter =
                             selectedValue; // update grading letter
 
                         lvl3CourseData[index].gradingLetterValue =
                             _gradingLetterValue(selectedValue);
                       } else {
-                        lvl3CourseData[index].selected = false;
+                        lvl3CourseData[index].selected = 0;
                       }
                     });
                   },
@@ -395,14 +422,14 @@ class _MyDialogState extends State<MyDialog>
                   onChanged: (value, selectedValue) {
                     setState(() {
                       lvl4CourseData[index].selected = value!;
-                      if (value) {
+                      if (value == 1) {
                         lvl4CourseData[index].gradingLetter =
                             selectedValue; // update grading letter
 
                         lvl4CourseData[index].gradingLetterValue =
                             _gradingLetterValue(selectedValue);
                       } else {
-                        lvl4CourseData[index].selected = false;
+                        lvl4CourseData[index].selected = 0;
                       }
                     });
                   },
@@ -477,35 +504,39 @@ class _MyDialogState extends State<MyDialog>
             switch (selectedLevel) {
               case 1:
                 lvl1CourseData.add(GPAData(
+                    level: 1,
                     courseName: value['name'],
                     weight: value['weight'],
                     gradingLetter: 'X',
                     gradingLetterValue: 0,
-                    selected: false));
+                    selected: 0));
                 break;
               case 2:
                 lvl2CourseData.add(GPAData(
+                    level: 2,
                     courseName: value['name'],
                     weight: value['weight'],
                     gradingLetter: 'X',
                     gradingLetterValue: 0,
-                    selected: false));
+                    selected: 0));
                 break;
               case 3:
                 lvl3CourseData.add(GPAData(
+                    level: 3,
                     courseName: value['name'],
                     weight: value['weight'],
                     gradingLetter: 'X',
                     gradingLetterValue: 0,
-                    selected: false));
+                    selected: 0));
                 break;
               case 4:
                 lvl4CourseData.add(GPAData(
+                    level: 4,
                     courseName: value['name'],
                     weight: value['weight'],
                     gradingLetter: 'X',
                     gradingLetterValue: 0,
-                    selected: false));
+                    selected: 0));
                 break;
               default:
             }
