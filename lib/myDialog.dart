@@ -205,11 +205,10 @@ int maxId = 0;
 void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
     lvl3CourseData, lvl4CourseData, parsingCourseData) {
   for (int i = 0; i < lvl1CourseData.length; i++) {
-    if (lvl1CourseData[i].selected == 1 &&
-        !parsingCourseData.contains(lvl1CourseData[i])) {
-      parsingCourseData.add(lvl1CourseData[i]);
-      // print('inserted data ' + SQLHelper.getItem(0).toString());
-      for (int j = 0; j < 1; j++) {
+    if (lvl1CourseData[i].selected == 1) {
+      if (!parsingCourseData.contains(lvl1CourseData[i])) {
+        parsingCourseData.add(lvl1CourseData[i]);
+
         SQLHelper.createItem(
             lvl1CourseData[i].level,
             lvl1CourseData[i].courseName,
@@ -217,14 +216,27 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
             lvl1CourseData[i].gradingLetter,
             lvl1CourseData[i].gradingLetterValue,
             1);
-        print('Added! $j');
-        print(SQLHelper.getItem(j).toString());
       }
+      // else if (parsingCourseData.contains(lvl1CourseData[i].courseName)) {
+      //   print('ádo meka weda');
+      //   SQLHelper.updateItem(
+      //       lvl1CourseData[i].level,
+      //       lvl1CourseData[i].courseName,
+      //       lvl1CourseData[i].weight,
+      //       lvl1CourseData[i].gradingLetter,
+      //       lvl1CourseData[i].gradingLetterValue,
+      //       1);
+      // }
     }
+    // if (lvl1CourseData[i].selected == 1 &&
+    //     parsingCourseData.contains(lvl1CourseData[i]) &&
+    //     parsingCourseData[i].gradingLetter != lvl1CourseData[i].gradingLetter) {
+
+    // }
   }
 
   for (int i = 0; i < lvl2CourseData.length; i++) {
-    if (lvl2CourseData[i].selected == true &&
+    if (lvl2CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl2CourseData[i])) {
       parsingCourseData.add(lvl2CourseData[i]);
       SQLHelper.createItem(
@@ -237,13 +249,13 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
     }
   }
   for (int i = 0; i < lvl3CourseData.length; i++) {
-    if (lvl3CourseData[i].selected == true &&
+    if (lvl3CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl3CourseData[i])) {
       parsingCourseData.add(lvl3CourseData[i]);
     }
   }
   for (int i = 0; i < lvl4CourseData.length; i++) {
-    if (lvl4CourseData[i].selected == true &&
+    if (lvl4CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl4CourseData[i])) {
       parsingCourseData.add(lvl4CourseData[i]);
     }
@@ -477,12 +489,6 @@ class _MyDialogState extends State<MyDialog>
   OutlinedButton addNewCourse() {
     return OutlinedButton(
       onPressed: () {
-        for (var course in lvl1CourseData) {
-          //checking for the highest id
-          if (course.id > maxId) {
-            maxId = course.id;
-          }
-        }
         showDialog(
           context: context,
           builder: (BuildContext context) {

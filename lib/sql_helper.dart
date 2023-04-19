@@ -64,13 +64,12 @@ class SQLHelper {
 
   // Update an item by id
   static Future<int> updateItem(
-      int id,
       int level,
       String courseName,
       double courseWeight,
       String gradingLetter,
       double gradingLetterValue,
-      bool isCourseSelected) async {
+      int isCourseSelected) async {
     final db = await SQLHelper.db();
 
     final data = {
@@ -83,8 +82,8 @@ class SQLHelper {
       'createdAt': DateTime.now().toString()
     };
 
-    final result =
-        await db.update('courses', data, where: "id = ?", whereArgs: [id]);
+    final result = await db.update('courses', data,
+        where: "courseName = ?", whereArgs: [courseName]);
     return result;
   }
 
