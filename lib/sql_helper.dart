@@ -90,12 +90,21 @@ class SQLHelper {
 
 // db.execSQL("delete from "+ TABLE_NAME);
   // Delete
-  static Future<void> deleteItem(int id) async {
+  static Future<void> deleteItem(String name) async {
     final db = await SQLHelper.db();
     try {
-      await db.delete("courses", where: "id = ?", whereArgs: [id]);
+      await db.delete("courses", where: "courseName = ?", whereArgs: [name]);
     } catch (err) {
       debugPrint("Something went wrong when deleting an item: $err");
     }
   }
+
+  // static Future<void> deleteItem(int id) async {
+  //   final db = await SQLHelper.db();
+  //   try {
+  //     await db.delete("courses", where: null, whereArgs: null);
+  //   } catch (err) {
+  //     debugPrint("Something went wrong when deleting an item: $err");
+  //   }
+  // }
 }

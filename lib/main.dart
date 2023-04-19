@@ -63,8 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
     List<GPAData> list = [];
     for (var element in _newDatabaseListMap) {
       list.add(GPAData(
+        id: element['id'],
         level: element['level'],
-        // id: element['id'],
+        //
         courseName: element['courseName'],
         weight: element['courseWeight'],
         gradingLetter: element['gradingLetter'],
@@ -81,8 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _getValue() async {
     // SQLHelper.createItem(1, 'test1', 3.0, 'A', 2.7, 1);
     // print(SQLHelper.getItems());
-    // SQLHelper.deleteItem()
+    // SQLHelper.deleteItem(0);
     _refresh();
+
     // print('data have been recieved from db data is : $_newDatabaseListMap');
     // print('..... no of itmes in db ${_newDatabaseListMap!.length}');
     // _newDatabaseListMap!.forEach((element) {
@@ -105,15 +107,18 @@ class _MyHomePageState extends State<MyHomePage> {
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
             // List<GPAData> data = SQLHelper.getItems() as List<GPAData>; //error
             // print('data from db issss $data');s
+            // print('finalselected value eka add wenw aeh ');
             finalSelectedCourseDataList.add(selectedCourseData[
                 i]); //place where the all selected courses are stored
-            SQLHelper.createItem(
-                1,
-                selectedCourseData[i].courseName,
-                selectedCourseData[i].weight,
-                selectedCourseData[i].gradingLetter,
-                selectedCourseData[i].gradingLetterValue,
-                1);
+            // print(
+            //     'selected data wala anke ${finalSelectedCourseDataList.length}');
+            // SQLHelper.createItem(
+            //     1,
+            //     selectedCourseData[i].courseName,
+            //     selectedCourseData[i].weight,
+            //     selectedCourseData[i].gradingLetter,
+            //     selectedCourseData[i].gradingLetterValue,
+            //     1);
           }
           _calculateGPA(finalSelectedCourseDataList);
         }
@@ -168,7 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     onDismissed: (direction) {
                       setState(() {
                         finalSelectedCourseDataList[index].selected = 0;
-
+                        SQLHelper.deleteItem(
+                            finalSelectedCourseDataList[index].courseName);
                         finalSelectedCourseDataList
                             .remove(finalSelectedCourseDataList[index]);
 
@@ -195,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].gradingLetterValue.toInt()} Credits)',
+                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
                                 ),
                               ),
                               Container(
