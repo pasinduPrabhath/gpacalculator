@@ -106,8 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedCourseData[i].gradingLetter != 'X' &&
               !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
             // List<GPAData> data = SQLHelper.getItems() as List<GPAData>; //error
-            // print('data from db issss $data');s
-            // print('finalselected value eka add wenw aeh ');
             finalSelectedCourseDataList.add(selectedCourseData[
                 i]); //place where the all selected courses are stored
             // print(
@@ -119,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
             //     selectedCourseData[i].gradingLetter,
             //     selectedCourseData[i].gradingLetterValue,
             //     1);
-            
           }
           _calculateGPA(finalSelectedCourseDataList);
         }
