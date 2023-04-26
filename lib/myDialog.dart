@@ -217,22 +217,7 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
             lvl1CourseData[i].gradingLetterValue,
             1);
       }
-      // else if (parsingCourseData.contains(lvl1CourseData[i].courseName)) {
-      //   print('ádo meka weda');
-      //   SQLHelper.updateItem(
-      //       lvl1CourseData[i].level,
-      //       lvl1CourseData[i].courseName,
-      //       lvl1CourseData[i].weight,
-      //       lvl1CourseData[i].gradingLetter,
-      //       lvl1CourseData[i].gradingLetterValue,
-      //       1);
-      // }
     }
-    // if (lvl1CourseData[i].selected == 1 &&
-    //     parsingCourseData.contains(lvl1CourseData[i]) &&
-    //     parsingCourseData[i].gradingLetter != lvl1CourseData[i].gradingLetter) {
-
-    // }
   }
 
   for (int i = 0; i < lvl2CourseData.length; i++) {

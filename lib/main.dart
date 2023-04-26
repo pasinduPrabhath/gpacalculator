@@ -36,6 +36,29 @@ class MyHomePage extends StatefulWidget {
 //show dialog box 1....
 class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
+
+  List<Map<String, dynamic>> _newDatabaseListMap = <Map<String, dynamic>>[];
+  bool _isLoading = false;
+  Future<void> _refresh() async {
+    _newDatabaseListMap = await SQLHelper.getItems();
+    List<GPAData> list = [];
+    for (var element in _newDatabaseListMap) {
+      list.add(GPAData(
+        id: element['id'],
+        level: element['level'],
+        courseName: element['courseName'],
+        weight: element['courseWeight'],
+        gradingLetter: element['gradingLetter'],
+        gradingLetterValue: element['gradingLetterValue'],
+        selected: element['selected'] == 1 ? 1 : 0,
+      ));
+    }
+    setState(() {
+      finalSelectedCourseDataList = list;
+    });
+    _calculateGPA(finalSelectedCourseDataList);
+  }
+
   var GPAValue = 0.0;
   final dropdownValue = <String, String>{};
   String selectedGradeLetter = 'A';
@@ -56,41 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return GPAValue;
   }
 
-  List<Map<String, dynamic>> _newDatabaseListMap = <Map<String, dynamic>>[];
-  bool _isLoading = false;
-  Future<void> _refresh() async {
-    _newDatabaseListMap = await SQLHelper.getItems();
-    List<GPAData> list = [];
-    for (var element in _newDatabaseListMap) {
-      list.add(GPAData(
-        id: element['id'],
-        level: element['level'],
-        //
-        courseName: element['courseName'],
-        weight: element['courseWeight'],
-        gradingLetter: element['gradingLetter'],
-        gradingLetterValue: element['gradingLetterValue'],
-        selected: element['selected'] == 1 ? 1 : 0,
-      ));
-    }
-    setState(() {
-      finalSelectedCourseDataList = list;
-    });
-    _calculateGPA(finalSelectedCourseDataList);
-  }
-
   Future<void> _getValue() async {
-    // SQLHelper.createItem(1, 'test1', 3.0, 'A', 2.7, 1);
-    // print(SQLHelper.getItems());
-    // SQLHelper.deleteItem(0);
     _refresh();
-
-    // print('data have been recieved from db data is : $_newDatabaseListMap');
-    // print('..... no of itmes in db ${_newDatabaseListMap!.length}');
-    // _newDatabaseListMap!.forEach((element) {
-    //   print('element is $element');
-    // });
-    // var x = _newDatabaseListMap![0]['courseName'];
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -102,24 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         List<GPAData> selectedCourseData = result;
         for (int i = 0; i < selectedCourseData.length; i++) {
-          if (selectedCourseData[i].selected == 1 &&
-              selectedCourseData[i].gradingLetter != 'X' &&
-              !finalSelectedCourseDataList.contains(selectedCourseData[i])) {
-            // List<GPAData> data = SQLHelper.getItems() as List<GPAData>; //error
-            finalSelectedCourseDataList.add(selectedCourseData[
-                i]); //place where the all selected courses are stored
-            // print(
-            //     'selected data wala anke ${finalSelectedCourseDataList.length}');
-            // SQLHelper.createItem(
-            //     1,
-            //     selectedCourseData[i].courseName,
-            //     selectedCourseData[i].weight,
-            //     selectedCourseData[i].gradingLetter,
-            //     selectedCourseData[i].gradingLetterValue,
-            //     1);
-          }
-          _calculateGPA(finalSelectedCourseDataList);
+          _refresh();
         }
+        _calculateGPA(finalSelectedCourseDataList);
       });
       _refresh();
     }

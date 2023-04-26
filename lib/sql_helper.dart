@@ -27,26 +27,52 @@ class SQLHelper {
   }
 
   // Create new item (journal)
-  static Future<int> createItem(
-      int? level,
-      String? courseName,
-      double? courseWeight,
-      String? gradingLetter,
-      double? gradingLetterValue,
-      int? isCourseSelected) async {
+  static Future<Object?> createItem(
+    int? level,
+    String? courseName,
+    double? courseWeight,
+    String? gradingLetter,
+    double? gradingLetterValue,
+    int? isCourseSelected,
+  ) async {
     final db = await SQLHelper.db();
 
-    final data = {
-      'level': level,
-      'courseName': courseName,
-      'courseWeight': courseWeight,
-      'gradingLetter': gradingLetter,
-      'gradingLetterValue': gradingLetterValue,
-      'isCourseSelected': isCourseSelected
-    };
-    final id = await db.insert('courses', data,
-        conflictAlgorithm: ConflictAlgorithm.replace);
-    return id;
+    // Check if the course already exists in the database
+    final existingCourses = await db.query(
+      'courses',
+      where: 'courseName = ?',
+      whereArgs: [courseName],
+      limit: 1,
+    );
+    if (existingCourses.isNotEmpty) {
+      // Update the existing entry
+      final existingCourse = existingCourses.first;
+      final id = existingCourse['id'];
+      final data = {
+        'level': level,
+        'courseName': courseName,
+        'courseWeight': courseWeight,
+        'gradingLetter': gradingLetter,
+        'gradingLetterValue': gradingLetterValue,
+        'isCourseSelected': isCourseSelected,
+        'createdAt': DateTime.now().toString(),
+      };
+      await db.update('courses', data, where: 'id = ?', whereArgs: [id]);
+      return id;
+    } else {
+      // Create a new entry
+      final data = {
+        'level': level,
+        'courseName': courseName,
+        'courseWeight': courseWeight,
+        'gradingLetter': gradingLetter,
+        'gradingLetterValue': gradingLetterValue,
+        'isCourseSelected': isCourseSelected,
+      };
+      final id = await db.insert('courses', data,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      return id;
+    }
   }
 
   // Read all items (journals)
