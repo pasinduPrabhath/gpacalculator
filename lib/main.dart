@@ -53,10 +53,17 @@ class _MyHomePageState extends State<MyHomePage> {
         selected: element['selected'] == 1 ? 1 : 0,
       ));
     }
+
     setState(() {
       finalSelectedCourseDataList = list;
+      print('course eka database eken list ekata add wela');
     });
     _calculateGPA(finalSelectedCourseDataList);
+  }
+
+  void testing() {
+    _refresh();
+    print('testing');
   }
 
   var GPAValue = 0.0;
@@ -76,25 +83,28 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       GPAValue = weightedGradePoints / totalCredits;
     }
+    print('meka digtma cl wenwa');
+    // _refresh();
     return GPAValue;
   }
 
   Future<void> _getValue() async {
-    _refresh();
+    // _refresh();
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const MyDialog(
+          builder: (context) => MyDialog(
                 title: '',
+                refresh: testing,
               )),
     );
     if (result != null) {
       setState(() {
-        List<GPAData> selectedCourseData = result;
-        for (int i = 0; i < selectedCourseData.length; i++) {
-          _refresh();
-        }
-        _calculateGPA(finalSelectedCourseDataList);
+        // finalSelectedCourseDataList = result;
+        // for (int i = 0; i < selectedCourseData.length; i++) {
+        //   refresh();
+        // }
+        // _calculateGPA(finalSelectedCourseDataList);
       });
       _refresh();
     }
@@ -154,7 +164,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (finalSelectedCourseDataList.isEmpty) {
                           GPAValue = 0.0;
                         }
-                        _calculateGPA(finalSelectedCourseDataList);
+                        _refresh();
+                        // _calculateGPA(finalSelectedCourseDataList);
                       });
                     },
                     background: Container(

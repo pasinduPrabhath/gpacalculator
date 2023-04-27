@@ -248,7 +248,8 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
 }
 
 class MyDialog extends StatefulWidget {
-  const MyDialog({super.key, required String title});
+  final void Function() refresh;
+  const MyDialog({super.key, required String title, required this.refresh});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -316,7 +317,7 @@ class _MyDialogState extends State<MyDialog>
                 addNewCourse(),
                 OutlinedButton(
                   onPressed: () {
-                    print('yata button eka ebuwa');
+                    widget.refresh();
                     handleTabSelection(lvl1CourseData, lvl2CourseData,
                         lvl3CourseData, lvl4CourseData, parsingCourseData);
                     Navigator.pop(context, parsingCourseData);
