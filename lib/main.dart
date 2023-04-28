@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gpacalculator/sql_helper.dart';
 import 'myDialog.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
   // ignore: non_constant_identifier_names
 
   List<Map<String, dynamic>> _newDatabaseListMap = <Map<String, dynamic>>[];
-  bool _isLoading = false;
   Future<void> _refresh() async {
     _newDatabaseListMap = await SQLHelper.getItems();
     List<GPAData> list = [];
@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    print('init state eka wela');
     super.initState();
     _refresh();
   }
@@ -149,70 +150,78 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(15.0),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.5,
-                child: ListView.builder(
-                  itemCount: finalSelectedCourseDataList.length,
-                  itemBuilder: (context, index) => Dismissible(
-                    key: Key(finalSelectedCourseDataList[index].courseName),
-                    onDismissed: (direction) {
-                      setState(() {
-                        finalSelectedCourseDataList[index].selected = 0;
-                        SQLHelper.deleteItem(
-                            finalSelectedCourseDataList[index].courseName);
-                        finalSelectedCourseDataList
-                            .remove(finalSelectedCourseDataList[index]);
+                child: EasyRefresh(
+                  onRefresh: _refresh,
+                  child: ListView.builder(
+                    itemCount: finalSelectedCourseDataList.length,
+                    itemBuilder: (context, index) => Dismissible(
+                      key: Key(finalSelectedCourseDataList[index].courseName),
+                      onDismissed: (direction) {
+                        setState(() {
+                          finalSelectedCourseDataList[index].selected = 0;
+                          SQLHelper.deleteItem(
+                              finalSelectedCourseDataList[index].courseName);
+                          finalSelectedCourseDataList
+                              .remove(finalSelectedCourseDataList[index]);
 
-                        if (finalSelectedCourseDataList.isEmpty) {
-                          GPAValue = 0.0;
-                        }
-                        _refresh();
-                        // _calculateGPA(finalSelectedCourseDataList);
-                      });
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerLeft,
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-                    direction: DismissDirection.startToEnd,
-                    child: Card(
-                      child: ListTile(
-                        title: Center(
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.06,
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
+                          if (finalSelectedCourseDataList.isEmpty) {
+                            GPAValue = 0.0;
+                          }
+                          _refresh();
+                          // _calculateGPA(finalSelectedCourseDataList);
+                        });
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerLeft,
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      direction: DismissDirection.startToEnd,
+                      child: Card(
+                        child: ListTile(
+                          title: Center(
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.06,
                                 ),
-                              ),
-                              Container(
-                                constraints: const BoxConstraints(
-                                  minWidth: 35, // set a minimum width
-                                  maxWidth: 35, // set a maximum width
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: double.minPositive,
-                                  ),
-                                ),
-                                padding: const EdgeInsets.only(
-                                    left: 5.0, right: 5.0, top: 2.0, bottom: 2),
-                                child: Center(
+                                Expanded(
+                                  flex: 2,
                                   child: Text(
-                                    finalSelectedCourseDataList[index]
-                                        .gradingLetter,
-                                    style: const TextStyle(fontSize: 16.0),
+                                    '${finalSelectedCourseDataList[index].courseName}   (${finalSelectedCourseDataList[index].weight.toInt()} Credits)',
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.08,
-                              ),
-                            ],
+                                Container(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 35, // set a minimum width
+                                    maxWidth: 35, // set a maximum width
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: double.minPositive,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.only(
+                                      left: 5.0,
+                                      right: 5.0,
+                                      top: 2.0,
+                                      bottom: 2),
+                                  child: Center(
+                                    child: Text(
+                                      finalSelectedCourseDataList[index]
+                                          .gradingLetter,
+                                      style: const TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.08,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
