@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 Container(
                                   constraints: const BoxConstraints(
-                                    minWidth: 35, // set a minimum width
+                                    minWidth: 35, // set a minimum widths
                                     maxWidth: 35, // set a maximum width
                                   ),
                                   decoration: BoxDecoration(
