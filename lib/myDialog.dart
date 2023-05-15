@@ -237,12 +237,26 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
     if (lvl3CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl3CourseData[i])) {
       parsingCourseData.add(lvl3CourseData[i]);
+      SQLHelper.createItem(
+          lvl3CourseData[i].level,
+          lvl3CourseData[i].courseName,
+          lvl3CourseData[i].weight,
+          lvl3CourseData[i].gradingLetter,
+          lvl3CourseData[i].gradingLetterValue,
+          1);
     }
   }
   for (int i = 0; i < lvl4CourseData.length; i++) {
     if (lvl4CourseData[i].selected == 1 &&
         !parsingCourseData.contains(lvl4CourseData[i])) {
       parsingCourseData.add(lvl4CourseData[i]);
+      SQLHelper.createItem(
+          lvl4CourseData[i].level,
+          lvl4CourseData[i].courseName,
+          lvl4CourseData[i].weight,
+          lvl4CourseData[i].gradingLetter,
+          lvl4CourseData[i].gradingLetterValue,
+          1);
     }
   }
 }
