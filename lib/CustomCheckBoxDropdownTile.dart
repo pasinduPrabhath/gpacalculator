@@ -1,6 +1,5 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:gpacalculator/myDialog.dart';
 
 //second screen widget
 class CustomCheckboxDropdownTile extends StatefulWidget {
