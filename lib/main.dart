@@ -9,7 +9,6 @@ void main() {
 
 //this is the main screen
 List<GPAData> finalSelectedCourseDataList = <GPAData>[];
-//new database List map
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
@@ -56,14 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       finalSelectedCourseDataList = list;
-      print('course eka database eken list ekata add wela');
     });
     _calculateGPA(finalSelectedCourseDataList);
   }
 
   void testing() {
     _refresh();
-    print('testing');
   }
 
   var GPAValue = 0.0;
@@ -83,13 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       GPAValue = weightedGradePoints / totalCredits;
     }
-    print('meka digtma cl wenwa');
-    // _refresh();
     return GPAValue;
   }
 
   Future<void> _getValue() async {
-    // _refresh();
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -99,20 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
               )),
     );
     if (result != null) {
-      setState(() {
-        // finalSelectedCourseDataList = result;
-        // for (int i = 0; i < selectedCourseData.length; i++) {
-        //   refresh();
-        // }
-        // _calculateGPA(finalSelectedCourseDataList);
-      });
       _refresh();
     }
   }
 
   @override
   void initState() {
-    print('init state eka wela');
     super.initState();
     _refresh();
   }
@@ -127,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.12,
               child: const SizedBox(),
             ),
             Text(
@@ -168,7 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             GPAValue = 0.0;
                           }
                           _refresh();
-                          // _calculateGPA(finalSelectedCourseDataList);
                         });
                       },
                       background: Container(
