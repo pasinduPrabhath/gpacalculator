@@ -132,6 +132,16 @@ class _MyHomePageState extends State<MyHomePage> {
               'Courses List',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.007,
+            ),
+            const Text(
+              'Pull to refresh',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: Colors.grey),
+            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: SizedBox(
