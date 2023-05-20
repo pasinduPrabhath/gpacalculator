@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.12,
+              height: MediaQuery.of(context).size.height * 0.08,
               child: const SizedBox(),
             ),
             Text(
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.58,
                 child: EasyRefresh(
                   onRefresh: _refresh,
                   child: ListView.builder(

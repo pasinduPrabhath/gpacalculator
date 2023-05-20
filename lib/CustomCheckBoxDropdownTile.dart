@@ -29,7 +29,8 @@ class _CustomCheckboxDropdownTileState
   @override
   void initState() {
     super.initState();
-    _selectedOption = 'B';
+    _selectedOption = 'X';
+    ;
   }
 
   @override

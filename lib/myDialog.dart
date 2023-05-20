@@ -24,20 +24,10 @@ class GPAData {
   });
 }
 
-List<GPAData> lvl1CourseData = [
-  //use to pass selected course weight to main.dart
-];
-
-List<GPAData> lvl2CourseData = [
-  //use to pass selected course weight to main.dart
-];
-List<GPAData> lvl3CourseData = [
-  //use to pass selected course weight to main.dart
-];
-List<GPAData> lvl4CourseData = [
-  //use to pass selected course weight to main.dart
-];
-
+List<GPAData> lvl1CourseData = [];
+List<GPAData> lvl2CourseData = [];
+List<GPAData> lvl3CourseData = [];
+List<GPAData> lvl4CourseData = [];
 List<GPAData> parsingCourseData = [];
 int selectedCoursesCount = 0;
 _gradingLetterValue(String selectedGradeLetter) {
@@ -101,24 +91,25 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
   }
 
   for (int i = 0; i < lvl2CourseData.length; i++) {
-    if (lvl2CourseData[i].selected == 1 &&
-        !parsingCourseData.contains(lvl2CourseData[i])) {
-      parsingCourseData.add(lvl2CourseData[i]);
-      SQLHelper.createItem(
-          lvl2CourseData[i].level,
-          lvl2CourseData[i].courseName,
-          lvl2CourseData[i].weight,
-          lvl2CourseData[i].gradingLetter,
-          lvl2CourseData[i].gradingLetterValue,
-          1);
-      // SQLHelper.createItemSecondWindow(
-      //     2,
-      //     lvl1CourseData[i].courseName,
-      //     lvl1CourseData[i].weight,
-      //     lvl1CourseData[i].gradingLetter,
-      //     lvl1CourseData[i].gradingLetterValue,
-      //     1);
+    if (lvl2CourseData[i].selected == 1) {
+      if (!parsingCourseData.contains(lvl2CourseData[i])) {
+        parsingCourseData.add(lvl2CourseData[i]);
+        SQLHelper.createItem(
+            lvl2CourseData[i].level,
+            lvl2CourseData[i].courseName,
+            lvl2CourseData[i].weight,
+            lvl2CourseData[i].gradingLetter,
+            lvl2CourseData[i].gradingLetterValue,
+            1);
+      }
     }
+    SQLHelper.createItemSecondWindow(
+        2,
+        lvl2CourseData[i].courseName,
+        lvl2CourseData[i].weight,
+        lvl2CourseData[i].gradingLetter,
+        lvl2CourseData[i].gradingLetterValue,
+        1);
   }
   for (int i = 0; i < lvl3CourseData.length; i++) {
     if (lvl3CourseData[i].selected == 1 &&
@@ -131,14 +122,14 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
           lvl3CourseData[i].gradingLetter,
           lvl3CourseData[i].gradingLetterValue,
           1);
-      // SQLHelper.createItemSecondWindow(
-      //     3,
-      //     lvl1CourseData[i].courseName,
-      //     lvl1CourseData[i].weight,
-      //     lvl1CourseData[i].gradingLetter,
-      //     lvl1CourseData[i].gradingLetterValue,
-      //     1);
     }
+    SQLHelper.createItemSecondWindow(
+        3,
+        lvl3CourseData[i].courseName,
+        lvl3CourseData[i].weight,
+        lvl3CourseData[i].gradingLetter,
+        lvl3CourseData[i].gradingLetterValue,
+        1);
   }
   for (int i = 0; i < lvl4CourseData.length; i++) {
     if (lvl4CourseData[i].selected == 1 &&
@@ -151,14 +142,14 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
           lvl4CourseData[i].gradingLetter,
           lvl4CourseData[i].gradingLetterValue,
           1);
-      // SQLHelper.createItemSecondWindow(
-      //     4,
-      //     lvl1CourseData[i].courseName,
-      //     lvl1CourseData[i].weight,
-      //     lvl1CourseData[i].gradingLetter,
-      //     lvl1CourseData[i].gradingLetterValue,
-      //     1);
     }
+    SQLHelper.createItemSecondWindow(
+        4,
+        lvl4CourseData[i].courseName,
+        lvl4CourseData[i].weight,
+        lvl4CourseData[i].gradingLetter,
+        lvl4CourseData[i].gradingLetterValue,
+        1);
   }
 }
 
@@ -207,9 +198,29 @@ class _MyDialogState extends State<MyDialog>
         selected: element['selected'] == 1 ? 1 : 0,
       ));
     }
-    lvl1CourseData = listfromDb;
+    // lvl1CourseData = listfromDb;
     setState(() {
-      lvl1CourseData = listfromDb;
+      lvl1CourseData.clear();
+      lvl2CourseData.clear();
+      lvl3CourseData.clear();
+      lvl4CourseData.clear();
+      if (listfromDb.length > 0) {
+        for (int i = 0; i < listfromDb.length; i++) {
+          if (listfromDb[i].level == 1 &&
+              !lvl1CourseData.contains(listfromDb[i])) {
+            lvl1CourseData.add(listfromDb[i]);
+          } else if (listfromDb[i].level == 2 &&
+              !lvl2CourseData.contains(listfromDb[i])) {
+            lvl2CourseData.add(listfromDb[i]);
+          } else if (listfromDb[i].level == 3 &&
+              !lvl3CourseData.contains(listfromDb[i])) {
+            lvl3CourseData.add(listfromDb[i]);
+          } else if (listfromDb[i].level == 4 &&
+              !lvl4CourseData.contains(listfromDb[i])) {
+            lvl4CourseData.add(listfromDb[i]);
+          }
+        }
+      }
     });
   }
 
@@ -288,12 +299,8 @@ class _MyDialogState extends State<MyDialog>
                 onDismissed: (direction) {
                   setState(() {
                     final courseName = lvl1CourseData[index].courseName;
-                    print(courseName);
                     SQLHelper.deleteItemSecondWindow(courseName);
-                    print('${lvl1CourseData.length}' + 'length');
                     lvl1CourseData.removeAt(index);
-                    print('Removed ${courseName}');
-                    print('${lvl1CourseData.length}' + 'length');
                     _refresh();
                   });
                 },
@@ -342,24 +349,44 @@ class _MyDialogState extends State<MyDialog>
           child: ListView.builder(
               itemCount: lvl2CourseData.length,
               itemBuilder: (context, index) {
-                return CustomCheckboxDropdownTile(
-                  title: lvl2CourseData[index].courseName,
-                  value: lvl2CourseData[index].selected,
-                  onChanged: (value, selectedValue) {
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
                     setState(() {
-                      lvl2CourseData[index].selected = value!;
-                      if (value == 1) {
-                        lvl2CourseData[index].gradingLetter =
-                            selectedValue; // update grading letter
-
-                        lvl2CourseData[index].gradingLetterValue =
-                            _gradingLetterValue(selectedValue);
-                      } else {
-                        lvl2CourseData[index].selected = 0;
-                      }
+                      final courseName = lvl2CourseData[index].courseName;
+                      SQLHelper.deleteItemSecondWindow(courseName);
+                      lvl2CourseData.removeAt(index);
+                      _refresh();
                     });
                   },
-                  options: gradeValue,
+                  background: Container(
+                    color: Colors.red,
+                    child: Icon(Icons.delete, color: Colors.white),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return CustomCheckboxDropdownTile(
+                        title: lvl2CourseData[index].courseName,
+                        value: lvl2CourseData[index].selected,
+                        onChanged: (value, selectedValue) {
+                          setState(() {
+                            lvl2CourseData[index].selected = value!;
+                            if (value == 1) {
+                              lvl2CourseData[index].gradingLetter =
+                                  selectedValue;
+                              lvl2CourseData[index].gradingLetterValue =
+                                  _gradingLetterValue(selectedValue);
+                            } else {
+                              lvl2CourseData[index].selected = 0;
+                            }
+                          });
+                        },
+                        options: gradeValue,
+                      );
+                    },
+                  ),
                 );
               }),
         ),
@@ -377,24 +404,44 @@ class _MyDialogState extends State<MyDialog>
           child: ListView.builder(
               itemCount: lvl3CourseData.length,
               itemBuilder: (context, index) {
-                return CustomCheckboxDropdownTile(
-                  title: lvl3CourseData[index].courseName,
-                  value: lvl3CourseData[index].selected,
-                  onChanged: (value, selectedValue) {
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
                     setState(() {
-                      lvl3CourseData[index].selected = value!;
-                      if (value == 1) {
-                        lvl3CourseData[index].gradingLetter =
-                            selectedValue; // update grading letter
-
-                        lvl3CourseData[index].gradingLetterValue =
-                            _gradingLetterValue(selectedValue);
-                      } else {
-                        lvl3CourseData[index].selected = 0;
-                      }
+                      final courseName = lvl3CourseData[index].courseName;
+                      SQLHelper.deleteItemSecondWindow(courseName);
+                      lvl3CourseData.removeAt(index);
+                      _refresh();
                     });
                   },
-                  options: gradeValue,
+                  background: Container(
+                    color: Colors.red,
+                    child: Icon(Icons.delete, color: Colors.white),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return CustomCheckboxDropdownTile(
+                        title: lvl3CourseData[index].courseName,
+                        value: lvl3CourseData[index].selected,
+                        onChanged: (value, selectedValue) {
+                          setState(() {
+                            lvl3CourseData[index].selected = value!;
+                            if (value == 1) {
+                              lvl3CourseData[index].gradingLetter =
+                                  selectedValue;
+                              lvl3CourseData[index].gradingLetterValue =
+                                  _gradingLetterValue(selectedValue);
+                            } else {
+                              lvl3CourseData[index].selected = 0;
+                            }
+                          });
+                        },
+                        options: gradeValue,
+                      );
+                    },
+                  ),
                 );
               }),
         ),
@@ -412,24 +459,44 @@ class _MyDialogState extends State<MyDialog>
           child: ListView.builder(
               itemCount: lvl4CourseData.length,
               itemBuilder: (context, index) {
-                return CustomCheckboxDropdownTile(
-                  title: lvl4CourseData[index].courseName,
-                  value: lvl4CourseData[index].selected,
-                  onChanged: (value, selectedValue) {
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
                     setState(() {
-                      lvl4CourseData[index].selected = value!;
-                      if (value == 1) {
-                        lvl4CourseData[index].gradingLetter =
-                            selectedValue; // update grading letter
-
-                        lvl4CourseData[index].gradingLetterValue =
-                            _gradingLetterValue(selectedValue);
-                      } else {
-                        lvl4CourseData[index].selected = 0;
-                      }
+                      final courseName = lvl4CourseData[index].courseName;
+                      SQLHelper.deleteItemSecondWindow(courseName);
+                      lvl4CourseData.removeAt(index);
+                      _refresh();
                     });
                   },
-                  options: gradeValue,
+                  background: Container(
+                    color: Colors.red,
+                    child: Icon(Icons.delete, color: Colors.white),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      return CustomCheckboxDropdownTile(
+                        title: lvl4CourseData[index].courseName,
+                        value: lvl4CourseData[index].selected,
+                        onChanged: (value, selectedValue) {
+                          setState(() {
+                            lvl4CourseData[index].selected = value!;
+                            if (value == 1) {
+                              lvl4CourseData[index].gradingLetter =
+                                  selectedValue;
+                              lvl4CourseData[index].gradingLetterValue =
+                                  _gradingLetterValue(selectedValue);
+                            } else {
+                              lvl4CourseData[index].selected = 0;
+                            }
+                          });
+                        },
+                        options: gradeValue,
+                      );
+                    },
+                  ),
                 );
               }),
         ),
