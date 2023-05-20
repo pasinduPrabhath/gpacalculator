@@ -5,6 +5,9 @@ import 'package:path/path.dart';
 class SQLHelper {
   static Future<void> createTables(Database database) async {
     await database.execute("""
+    DROP TABLE IF EXISTS newAddedCourses
+  """);
+    await database.execute("""
       CREATE TABLE IF NOT EXISTS courses(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         level INTEGER NOT NULL,
@@ -228,9 +231,9 @@ class SQLHelper {
   }
 
   static Future<void> deleteItemSecondWindow(String name) async {
-    final db = await SQLHelper.db2();
+    final db2 = await SQLHelper.db2();
     try {
-      await db.delete("newAddedCourses",
+      await db2.delete("newAddedCourses",
           where: "courseName = ?", whereArgs: [name]);
     } catch (err) {
       debugPrint("Something went wrong when deleting an item: $err");

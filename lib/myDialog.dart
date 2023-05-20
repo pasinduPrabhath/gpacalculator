@@ -30,84 +30,12 @@ List<GPAData> lvl1CourseData = [
 
 List<GPAData> lvl2CourseData = [
   //use to pass selected course weight to main.dart
-  GPAData(
-      id: 7,
-      level: 2,
-      courseName: 'Infromation System Modeling',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 8,
-      level: 2,
-      courseName: 'Cloud Computing',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 9,
-      level: 2,
-      courseName: 'Design Patterns',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 10,
-      level: 2,
-      courseName: 'AI',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 11,
-      level: 2,
-      courseName: 'Software Architecture',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 12,
-      level: 2,
-      courseName: 'Mobile Applications Development',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 13,
-      level: 2,
-      courseName: 'Web Development 2',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
 ];
 List<GPAData> lvl3CourseData = [
   //use to pass selected course weight to main.dart
-  GPAData(
-      id: 14,
-      level: 3,
-      courseName: 'Big Data',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
 ];
 List<GPAData> lvl4CourseData = [
   //use to pass selected course weight to main.dart
-  GPAData(
-      id: 15,
-      level: 4,
-      courseName: 'Image Processing',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
 ];
 
 List<GPAData> parsingCourseData = [];
@@ -266,7 +194,7 @@ class _MyDialogState extends State<MyDialog>
   ];
   // late String _newCourseName;
   Future<void> _refresh() async {
-    _dataFromDb = await SQLHelper.getItems();
+    _dataFromDb = await SQLHelper.getItemsSecondWindow();
     listfromDb.clear();
     for (var element in _dataFromDb) {
       listfromDb.add(GPAData(
@@ -359,7 +287,14 @@ class _MyDialogState extends State<MyDialog>
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   setState(() {
+                    final courseName = lvl1CourseData[index].courseName;
+                    print(courseName);
+                    SQLHelper.deleteItemSecondWindow(courseName);
+                    print('${lvl1CourseData.length}' + 'length');
                     lvl1CourseData.removeAt(index);
+                    print('Removed ${courseName}');
+                    print('${lvl1CourseData.length}' + 'length');
+                    _refresh();
                   });
                 },
                 background: Container(
