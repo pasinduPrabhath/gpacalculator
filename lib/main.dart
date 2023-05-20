@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: MediaQuery.of(context).size.height * 0.007,
             ),
             const Text(
-              'Pull to refresh',
+              '⬇️ Pull to refresh',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,

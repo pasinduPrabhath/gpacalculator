@@ -26,62 +26,6 @@ class GPAData {
 
 List<GPAData> lvl1CourseData = [
   //use to pass selected course weight to main.dart
-  GPAData(
-      id: 0,
-      level: 1,
-      courseName: 'Programming',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 1,
-      level: 1,
-      courseName: 'DB',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 2,
-      level: 1,
-      courseName: 'Cloud',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 3,
-      level: 1,
-      courseName: 'AI',
-      weight: 3,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 4,
-      level: 1,
-      courseName: 'ML',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 5,
-      level: 1,
-      courseName: 'Data Science',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
-  GPAData(
-      id: 6,
-      level: 1,
-      courseName: 'Cyber Security',
-      weight: 2,
-      gradingLetter: 'X',
-      gradingLetterValue: 0,
-      selected: 0),
 ];
 
 List<GPAData> lvl2CourseData = [
@@ -218,6 +162,14 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
             1);
       }
     }
+
+    SQLHelper.createItemSecondWindow(
+        1,
+        lvl1CourseData[i].courseName,
+        lvl1CourseData[i].weight,
+        lvl1CourseData[i].gradingLetter,
+        lvl1CourseData[i].gradingLetterValue,
+        1);
   }
 
   for (int i = 0; i < lvl2CourseData.length; i++) {
@@ -231,6 +183,13 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
           lvl2CourseData[i].gradingLetter,
           lvl2CourseData[i].gradingLetterValue,
           1);
+      // SQLHelper.createItemSecondWindow(
+      //     2,
+      //     lvl1CourseData[i].courseName,
+      //     lvl1CourseData[i].weight,
+      //     lvl1CourseData[i].gradingLetter,
+      //     lvl1CourseData[i].gradingLetterValue,
+      //     1);
     }
   }
   for (int i = 0; i < lvl3CourseData.length; i++) {
@@ -244,6 +203,13 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
           lvl3CourseData[i].gradingLetter,
           lvl3CourseData[i].gradingLetterValue,
           1);
+      // SQLHelper.createItemSecondWindow(
+      //     3,
+      //     lvl1CourseData[i].courseName,
+      //     lvl1CourseData[i].weight,
+      //     lvl1CourseData[i].gradingLetter,
+      //     lvl1CourseData[i].gradingLetterValue,
+      //     1);
     }
   }
   for (int i = 0; i < lvl4CourseData.length; i++) {
@@ -257,9 +223,19 @@ void handleTabSelection(List<GPAData> lvl1CourseData, lvl2CourseData,
           lvl4CourseData[i].gradingLetter,
           lvl4CourseData[i].gradingLetterValue,
           1);
+      // SQLHelper.createItemSecondWindow(
+      //     4,
+      //     lvl1CourseData[i].courseName,
+      //     lvl1CourseData[i].weight,
+      //     lvl1CourseData[i].gradingLetter,
+      //     lvl1CourseData[i].gradingLetterValue,
+      //     1);
     }
   }
 }
+
+List<GPAData> listfromDb = [];
+List<Map<String, dynamic>> _dataFromDb = <Map<String, dynamic>>[];
 
 class MyDialog extends StatefulWidget {
   final void Function() refresh;
@@ -289,11 +265,34 @@ class _MyDialogState extends State<MyDialog>
     'X'
   ];
   // late String _newCourseName;
+  Future<void> _refresh() async {
+    _dataFromDb = await SQLHelper.getItems();
+    listfromDb.clear();
+    for (var element in _dataFromDb) {
+      listfromDb.add(GPAData(
+        id: element['id'],
+        level: element['level'],
+        courseName: element['courseName'],
+        weight: element['courseWeight'],
+        gradingLetter: element['gradingLetter'],
+        gradingLetterValue: element['gradingLetterValue'],
+        selected: element['selected'] == 1 ? 1 : 0,
+      ));
+    }
+    lvl1CourseData = listfromDb;
+    setState(() {
+      lvl1CourseData = listfromDb;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+
+    setState(() {
+      _refresh();
+    });
     // _tabController.addListener(_handleTabSelection);
   }
 
@@ -307,10 +306,10 @@ class _MyDialogState extends State<MyDialog>
             bottom: TabBar(
               controller: _tabController,
               tabs: const [
-                Tab(icon: Icon(Icons.looks_one_outlined)),
-                Tab(icon: Icon(Icons.looks_two_outlined)),
-                Tab(icon: Icon(Icons.looks_3_outlined)),
-                Tab(icon: Icon(Icons.looks_4_outlined)),
+                Tab(text: 'Year', icon: Icon(Icons.looks_one_outlined)),
+                Tab(text: 'Year', icon: Icon(Icons.looks_two_outlined)),
+                Tab(text: 'Year', icon: Icon(Icons.looks_3_outlined)),
+                Tab(text: 'Year', icon: Icon(Icons.looks_4_outlined)),
               ],
             ),
             title: const Text('Select courses'),
@@ -354,28 +353,45 @@ class _MyDialogState extends State<MyDialog>
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: lvl1CourseData.length,
-              itemBuilder: (context, index) {
-                return CustomCheckboxDropdownTile(
-                  title: lvl1CourseData[index].courseName,
-                  value: lvl1CourseData[index].selected,
-                  onChanged: (value, selectedValue) {
-                    setState(() {
-                      lvl1CourseData[index].selected = value!;
-                      if (value == 1) {
-                        lvl1CourseData[index].gradingLetter =
-                            selectedValue; // update grading letter
-
-                        lvl1CourseData[index].gradingLetterValue =
-                            _gradingLetterValue(selectedValue);
-                      } else {
-                        lvl1CourseData[index].selected = 0;
-                      }
-                    });
+            itemCount: lvl1CourseData.length,
+            itemBuilder: (context, index) {
+              return Dismissible(
+                key: UniqueKey(),
+                onDismissed: (direction) {
+                  setState(() {
+                    lvl1CourseData.removeAt(index);
+                  });
+                },
+                background: Container(
+                  color: Colors.red,
+                  child: Icon(Icons.delete, color: Colors.white),
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20),
+                ),
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return CustomCheckboxDropdownTile(
+                      title: lvl1CourseData[index].courseName,
+                      value: lvl1CourseData[index].selected,
+                      onChanged: (value, selectedValue) {
+                        setState(() {
+                          lvl1CourseData[index].selected = value!;
+                          if (value == 1) {
+                            lvl1CourseData[index].gradingLetter = selectedValue;
+                            lvl1CourseData[index].gradingLetterValue =
+                                _gradingLetterValue(selectedValue);
+                          } else {
+                            lvl1CourseData[index].selected = 0;
+                          }
+                        });
+                      },
+                      options: gradeValue,
+                    );
                   },
-                  options: gradeValue,
-                );
-              }),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
